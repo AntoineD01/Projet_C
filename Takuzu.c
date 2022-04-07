@@ -3,3 +3,5 @@
 //
 
 #include "Takuzu.h"
+#include <stdio.h>
+
