@@ -6,5 +6,8 @@
 #define PROJETC_TAKUZU_H
 
 void menu();
-void display_matrix();
+int size();
+void matrix_four();
+void matrix_eight();
+
 #endif //PROJETC_TAKUZU_H

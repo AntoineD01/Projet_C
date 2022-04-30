@@ -4,5 +4,12 @@
 int main()
 {
     menu();
-    display_matrix();
+    if (size()==4)
+    {
+        matrix_four();
+    }
+    else
+    {
+        matrix_eight();
+    }
 }
