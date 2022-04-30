@@ -3,4 +3,4 @@ project(ProjetC C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(ProjetC main.c)
+add_executable(ProjetC main.c Takuzu.c Takuzu.h)

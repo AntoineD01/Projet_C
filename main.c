@@ -3,5 +3,6 @@
 
 int main()
 {
-
+    menu();
+    display_matrix();
 }
