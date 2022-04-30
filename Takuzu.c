@@ -14,6 +14,14 @@ void menu() /*The main menu function*/
         printf("If you want to play, press 1\n");
         scanf("%d",&play);
     }while(play != 1);
+    if (size()==4)
+    {
+        matrix_four();
+    }
+    else
+    {
+        matrix_eight();
+    }
 }
 
 
@@ -36,17 +44,37 @@ void matrix_four() /*Display the 4*4 matrix*/
             {0, 1, 1, 0},
             {0, 1, 0, 1}
     };
+    int mask4[4][4]={
+            {1, 0, 0, 0},
+            {0, 0, 1, 0},
+            {1, 0, 1, 1},
+            {0, 1, 0, 0}
+    };
     for (int i=0; i<4; i++)
     {
         for (int j=0; j<4; j++)
         {
-            if (j!=3)
+            if (mask4[i][j]==1)
             {
-                printf("%d ",matrix4[i][j]);
+                if (j!=3)
+                {
+                    printf("%d ",matrix4[i][j]);
+                }
+                else
+                {
+                    printf("%d\n",matrix4[i][j]);
+                }
             }
             else
             {
-                printf("%d\n",matrix4[i][j]);
+                if (j!=3)
+                {
+                    printf("  ");
+                }
+                else
+                {
+                    printf("\n");
+                }
             }
         }
     }
@@ -64,17 +92,41 @@ void matrix_eight() /*Display the 8*8 matrix*/
             {0, 0, 1, 1, 0,1 ,1,0},
             {1, 1, 0, 0, 1,0 ,0,1},
     };
+    int mask8[8][8]={
+            {1, 0, 1, 1, 0,1 ,0,1},
+            {0, 0, 1, 0, 0,0 ,0,0},
+            {1, 0, 0, 0, 0,0 ,0,1},
+            {1, 0, 1, 0, 0,1 ,1,0},
+            {1, 0, 0, 0, 1,0 ,0,1},
+            {0, 0, 0, 0, 1,0 ,0,0},
+            {0, 1, 1, 1, 1,1 ,0,0},
+            {0, 1, 0, 1, 0,0 ,1,0},
+    };
     for (int i=0; i<8; i++)
     {
         for (int j=0; j<8; j++)
         {
-            if (j!=7)
+            if (mask8[i][j]==1)
             {
-                printf("%d ",matrix8[i][j]);
+                if (j!=7)
+                {
+                    printf("%d ",matrix8[i][j]);
+                }
+                else
+                {
+                    printf("%d\n",matrix8[i][j]);
+                }
             }
             else
             {
-                printf("%d\n",matrix8[i][j]);
+                if (j!=7)
+                {
+                    printf("  ");
+                }
+                else
+                {
+                    printf("\n");
+                }
             }
         }
     }
