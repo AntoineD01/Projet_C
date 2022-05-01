@@ -9,18 +9,33 @@
 void menu() /*The main menu function*/
 {
     printf("Hello player, welcome to Takuzu\n");
-    int play;
-    do {
-        printf("If you want to play, press 1\n");
-        scanf("%d",&play);
-    }while(play != 1);
-    if (size()==4)
+    int s, choice;
+    s = size();
+    if (s==4)
     {
-        matrix_four();
+        do{
+            printf("Do you want to :\n - Enter a mask manually (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n");
+            scanf("%d",&choice);
+        }while(choice != 1 && choice != 2 && choice != 3);
+        if (choice==1)
+        {
+            enter_mask();
+        }
+        else
+        {
+            if (choice==2)
+            {
+                generate_mask();
+            }
+            else
+            {
+                play(s);
+            }
+        }
     }
     else
     {
-        matrix_eight();
+
     }
 }
 
@@ -38,7 +53,7 @@ int size() /*Ask for the size of the Takuzu that the user wants*/
 
 void matrix_four() /*Display the 4*4 matrix*/
 {
-    int matrix4[4][4]={
+    int solution4[4][4]={
             {1, 0, 0, 1},
             {1, 0, 1, 0},
             {0, 1, 1, 0},
@@ -58,11 +73,11 @@ void matrix_four() /*Display the 4*4 matrix*/
             {
                 if (j!=3)
                 {
-                    printf("%d ",matrix4[i][j]);
+                    printf("%d ",solution4[i][j]);
                 }
                 else
                 {
-                    printf("%d\n",matrix4[i][j]);
+                    printf("%d\n",solution4[i][j]);
                 }
             }
             else
@@ -82,7 +97,7 @@ void matrix_four() /*Display the 4*4 matrix*/
 
 void matrix_eight() /*Display the 8*8 matrix*/
 {
-    int matrix8[8][8]={
+    int solution8[8][8]={
             {1, 0, 1, 1, 0,1 ,0,0},
             {1, 0, 1, 0, 1,0 ,0,1},
             {0, 1, 0, 1, 1,0 ,1,0},
@@ -110,11 +125,11 @@ void matrix_eight() /*Display the 8*8 matrix*/
             {
                 if (j!=7)
                 {
-                    printf("%d ",matrix8[i][j]);
+                    printf("%d ",solution8[i][j]);
                 }
                 else
                 {
-                    printf("%d\n",matrix8[i][j]);
+                    printf("%d\n",solution8[i][j]);
                 }
             }
             else
@@ -129,5 +144,28 @@ void matrix_eight() /*Display the 8*8 matrix*/
                 }
             }
         }
+    }
+}
+
+void enter_mask()
+{
+    printf("TO BE DONE");
+}
+
+void generate_mask()
+{
+    printf("TO BE DONE");
+}
+
+
+void play(int a)
+{
+    if (a==4)
+    {
+        matrix_four();
+    }
+    else
+    {
+        matrix_eight();
     }
 }

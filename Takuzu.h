@@ -9,5 +9,8 @@ void menu();
 int size();
 void matrix_four();
 void matrix_eight();
+void enter_mask();
+void generate_mask();
+void play(int);
 
 #endif //PROJETC_TAKUZU_H
