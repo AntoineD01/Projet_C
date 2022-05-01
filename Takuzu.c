@@ -11,31 +11,33 @@ void menu() /*The main menu function*/
     printf("Hello player, welcome to Takuzu\n");
     int s, choice;
     s = size();
-    if (s==4)
+    int mask[s][s];
+    int solution[4][4]= {
+            {1, 0, 0, 1},
+            {1, 0, 1, 0},
+            {0, 1, 1, 0},
+            {0, 1, 0, 1}
+    };
+    do{
+        printf("Do you want to :\n - Enter a mask manually (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n");
+        scanf("%d",&choice);
+    }while(choice != 1 && choice != 2 && choice != 3);
+
+    if (choice==1)
     {
-        do{
-            printf("Do you want to :\n - Enter a mask manually (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n");
-            scanf("%d",&choice);
-        }while(choice != 1 && choice != 2 && choice != 3);
-        if (choice==1)
-        {
-            enter_mask();
-        }
-        else
-        {
-            if (choice==2)
-            {
-                generate_mask();
-            }
-            else
-            {
-                play(s);
-            }
-        }
+        enter_mask(s,mask);
+        display_matrix(s,mask,solution);
     }
     else
     {
-
+        if (choice==2)
+        {
+            generate_mask(s,mask);
+        }
+        else
+        {
+            play(s,mask, solution);
+        }
     }
 }
 
@@ -51,33 +53,21 @@ int size() /*Ask for the size of the Takuzu that the user wants*/
 }
 
 
-void matrix_four() /*Display the 4*4 matrix*/
+void display_matrix(int s, int mask[s][s], int solution[s][s]) /*Display the matrix*/
 {
-    int solution4[4][4]={
-            {1, 0, 0, 1},
-            {1, 0, 1, 0},
-            {0, 1, 1, 0},
-            {0, 1, 0, 1}
-    };
-    int mask4[4][4]={
-            {1, 0, 0, 0},
-            {0, 0, 1, 0},
-            {1, 0, 1, 1},
-            {0, 1, 0, 0}
-    };
     for (int i=0; i<4; i++)
     {
         for (int j=0; j<4; j++)
         {
-            if (mask4[i][j]==1)
+            if (mask[i][j]==1)
             {
                 if (j!=3)
                 {
-                    printf("%d ",solution4[i][j]);
+                    printf("%d ",solution[i][j]);
                 }
                 else
                 {
-                    printf("%d\n",solution4[i][j]);
+                    printf("%d\n",solution[i][j]);
                 }
             }
             else
@@ -95,77 +85,44 @@ void matrix_four() /*Display the 4*4 matrix*/
     }
 }
 
-void matrix_eight() /*Display the 8*8 matrix*/
-{
-    int solution8[8][8]={
-            {1, 0, 1, 1, 0,1 ,0,0},
-            {1, 0, 1, 0, 1,0 ,0,1},
-            {0, 1, 0, 1, 1,0 ,1,0},
-            {0, 1, 0, 1, 0,1 ,1,0},
-            {1, 0, 1, 0, 0,1 ,0,1},
-            {0, 1, 0, 0, 1,0 ,1,1},
-            {0, 0, 1, 1, 0,1 ,1,0},
-            {1, 1, 0, 0, 1,0 ,0,1},
-    };
-    int mask8[8][8]={
-            {1, 0, 1, 1, 0,1 ,0,1},
-            {0, 0, 1, 0, 0,0 ,0,0},
-            {1, 0, 0, 0, 0,0 ,0,1},
-            {1, 0, 1, 0, 0,1 ,1,0},
-            {1, 0, 0, 0, 1,0 ,0,1},
-            {0, 0, 0, 0, 1,0 ,0,0},
-            {0, 1, 1, 1, 1,1 ,0,0},
-            {0, 1, 0, 1, 0,0 ,1,0},
-    };
-    for (int i=0; i<8; i++)
-    {
-        for (int j=0; j<8; j++)
-        {
-            if (mask8[i][j]==1)
-            {
-                if (j!=7)
-                {
-                    printf("%d ",solution8[i][j]);
-                }
-                else
-                {
-                    printf("%d\n",solution8[i][j]);
-                }
-            }
-            else
-            {
-                if (j!=7)
-                {
-                    printf("  ");
-                }
-                else
-                {
-                    printf("\n");
-                }
-            }
-        }
-    }
-}
 
-void enter_mask()
-{
-    printf("TO BE DONE");
-}
-
-void generate_mask()
+void generate_mask(int s,int m[s][s]) /*Generate a mask*/
 {
     printf("TO BE DONE");
 }
 
 
-void play(int a)
+void play(int s, int mask[s][s], int solution[s][s]) /*Play the Takuzu*/
 {
-    if (a==4)
+    display_matrix(s,mask,solution);
+    enter_value(s,mask,solution);
+}
+
+int return_the_ascii(char c)
+{
+    return c;
+}
+
+void enter_value(int s, int mask[s][s], int solution[s][s])
+{
+    char column;
+    int row,value;
+    if (s==4)
     {
-        matrix_four();
+        do{
+            printf("Enter the coordinate of the value you want to enter (A to D and 1 to 4): ");
+            scanf("%c%d",&column,&row);
+        }while(row != 1 && row != 2 && row != 3 && row != 4);
+
+        do{
+            printf("Enter the value you want to enter : ");
+            scanf("%d",&value);
+        }while(row != 1 && row != 2 && row != 3 && row != 4);
     }
-    else
-    {
-        matrix_eight();
-    }
+
+}
+
+void enter_mask(int s, int mask[s][s])
+{
+
 }
