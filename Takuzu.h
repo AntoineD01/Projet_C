@@ -13,5 +13,7 @@ void generate_mask(int s,int mask[s][s]);
 void play(int s, int mask[s][s], int solution[s][s]);
 void enter_value(int s, int mask[s][s], int solution[s][s]);
 int return_the_ascii(char c);
+int empty(int s, int mask[s][s], int i, int j );
+
 
 #endif //PROJETC_TAKUZU_H
