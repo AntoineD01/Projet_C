@@ -285,9 +285,44 @@ void menu() /*The main menu function*/
 
 void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int column, int value)
 {
-    if (game_grid[row][column] == 0 && game_grid[row][column])
+    if (game_grid[row][column-1] == game_grid[row][column-2])
     {
-
+        printf("The two previous values in this row are the same. You must put another value after it.\n");
+    }
+    else
+    {
+        if (game_grid[row][column+1] == game_grid[row][column+2])
+        {
+            printf("The two next values in this row are the same. You must put another value before it.\n");
+        }
+        else
+        {
+            if (game_grid[row-1][column] == game_grid[row-2][column])
+            {
+                printf("The two previous values in this column are the same. You must put another value after it.\n");
+            }
+            else
+            {
+                if (game_grid[row+1][column] == game_grid[row+2][column])
+                {
+                    printf("The two next values in this column are the same. You must put another value before it.\n");
+                }
+                else
+                {
+                    if (game_grid[row][column-1] == game_grid[row][column+1])
+                    {
+                        printf("The two values around are the same. You must put another value in the middle.\n");
+                    }
+                    else
+                    {
+                        if (game_grid[row-1][column] == game_grid[row+1][column])
+                        {
+                            printf("The two values above and below are the same. You must put another value in the middle.\n");
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
