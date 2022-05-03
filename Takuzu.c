@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 /*Already done*/
 
 int size() /*Ask for the size of the Takuzu that the user wants*/
@@ -114,51 +115,60 @@ int conv_l_to_nb(int s,int column) /*Transform the column to a value*/
 void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lifes)
 {
     char column;
-    int row,value,j,valid,same_solution;
+    int row,value,j,valid,same_solution,full1;
+    full1 = full(s,game_grid);
 
-    column = ask_column(s);
-    j = conv_l_to_nb(s, column); /*Convert the letter given by the user to the real column in the matrix*/
-
-    row = ask_row(s);
-    row-=1;  /*Convert the value given by the user to the real row in the matrix*/
-
-    valid = empty(s, game_grid, row, j); /*Check if the cell is empty*/
-
-    if (valid == 0) /*If the cell is not empty*/
+    if (full1 == 0)
     {
-        printf("The cell is not empty.\nTry again :\n");
-        play(s,mask, solution,game_grid,lifes);
+        column = ask_column(s);
+        j = conv_l_to_nb(s, column); /*Convert the letter given by the user to the real column in the matrix*/
+
+        row = ask_row(s);
+        row-=1;  /*Convert the value given by the user to the real row in the matrix*/
+
+        valid = empty(s, game_grid, row, j); /*Check if the cell is empty*/
+
+        if (valid == 0) /*If the cell is not empty*/
+        {
+            printf("The cell is not empty.\nTry again :\n");
+            play(s,mask, solution,game_grid,lifes);
+        }
+        else /*If the cell is empty*/
+        {
+            do {
+                printf("Enter the value you want to enter (1 or 0): \n");
+                scanf("%d", &value);
+            } while (value != 1 && value != 0);
+            same_solution = validity(s,solution,game_grid,row,j,value);
+
+
+            if (same_solution == 1)
+            {
+                game_grid[row][j] = value;
+                printf("You want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row);
+            }
+            else
+            {
+                why_wrong(s,solution,game_grid,row,j,value);
+                lifes-=1;
+                printf("You lost one life. You have now %d.\n\n",lifes);
+            }
+
+            if (lifes !=0)
+            {
+                play(s,mask,solution,game_grid, lifes);
+            }
+            else
+            {
+                printf("You've lost ! Try again !\n\n");
+                menu();
+            }
+        }
     }
-    else /*If the cell is empty*/
+    else
     {
-        do {
-            printf("Enter the value you want to enter (1 or 0): \n");
-            scanf("%d", &value);
-        } while (value != 1 && value != 0);
-        same_solution = validity(s,solution,game_grid,row,j,value);
-
-
-        if (same_solution == 1)
-        {
-            game_grid[row][j] = value;
-            printf("You want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row);
-        }
-        else
-        {
-            why_wrong(s,solution,game_grid,row,j,value);
-            lifes-=1;
-            printf("You lost one life. You have now %d.\n\n",lifes);
-        }
-
-        if (lifes !=0)
-        {
-            play(s,mask,solution,game_grid, lifes);
-        }
-        else
-        {
-            printf("You've lost ! Try again !\n\n");
-            menu();
-        }
+        printf("You've finished this grid, well done !\n\n");
+        menu();
     }
 
 
@@ -274,7 +284,28 @@ void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int colum
     }
 }
 
+
 /*Work in progress*/
+
+
+int full(int s, int grid[s][s])
+{
+    int full = 1;
+    for (int i=0; i<s; i++){
+        for (int j = 0; j < s; j++) {
+            if (grid[i][j] == 10)
+            {
+                full = 0;
+                break;
+            }
+
+        }
+    }
+    return full;
+}
+
+
+
 
 void menu() /*The main menu function*/
 {
@@ -316,7 +347,6 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
     int r;
     srand(time(0));
     r = (rand()%2); /*Generate a random number*/
-    printf("%d\n",r);
     if (s==4)
     {
         int solution1[4][4]={
