@@ -7,7 +7,7 @@
 
 void menu();
 int size();
-void display_matrix1(int s, int grid[s][s]);
+void display_matrix(int s, int grid[s][s]);
 void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s]);
 void enter_mask(int s, int mask[s][s]);
 void generate_mask(int s,int mask[s][s]);
@@ -19,5 +19,7 @@ int validity(int s, int solution[s][s], int game_grid[s][s], int row, int column
 char ask_column(int s);
 int ask_row(int s);
 void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int column, int value);
+void generate_matrix(int s, int solution[s][s], int mask[s][s]);
+
 
 #endif //PROJETC_TAKUZU_H

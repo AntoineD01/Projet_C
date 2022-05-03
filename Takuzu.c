@@ -4,7 +4,8 @@
 
 #include "Takuzu.h"
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <time.h>
 /*Already done*/
 
 int size() /*Ask for the size of the Takuzu that the user wants*/
@@ -17,7 +18,7 @@ int size() /*Ask for the size of the Takuzu that the user wants*/
     return(size);
 }
 
-void display_matrix1(int s, int grid[s][s]) /*Display the matrix*/
+void display_matrix(int s, int grid[s][s]) /*Display the matrix*/
 {
     for (int i=0; i<s; i++) {
         for (int j = 0; j < s; j++) {
@@ -122,7 +123,6 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
     row-=1;  /*Convert the value given by the user to the real row in the matrix*/
 
     valid = empty(s, game_grid, row, j); /*Check if the cell is empty*/
-    printf(" Row : %d\n Column : %d\n Valid : %d\n",row,j,valid); /*TO BE REMOVED*/
 
     if (valid == 0) /*If the cell is not empty*/
     {
@@ -188,7 +188,6 @@ char ask_column(int s)
             scanf("%c", &column);
         } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'a' && column != 'b' &&
                  column != 'c' && column != 'd');
-        printf("You choose column %c.\n", column);
     }
     else
     {
@@ -198,7 +197,6 @@ char ask_column(int s)
         } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'E' && column != 'F' &&
                  column != 'G' && column != 'H' && column != 'a' && column != 'b' && column != 'c' && column != 'd' && column != 'e' && column != 'f' &&
                  column != 'g' && column != 'h');
-        printf("You choose column %c.\n", column);
     }
     return column;
 }
@@ -212,7 +210,6 @@ int ask_row(int s)
             printf("Enter the row of the value you want to enter (1 to 4): \n");
             scanf("%d", &row);
         } while (row != 1 && row != 2 && row != 3 && row != 4);
-        printf("You choose row %d.\n", row);
     }
     else
     {
@@ -220,15 +217,61 @@ int ask_row(int s)
             printf("Enter the row of the value you want to enter (1 to 8): \n");
             scanf("%d", &row);
         } while (row != 1 && row != 2 && row != 3 && row != 4 && row != 5 && row != 6 && row != 7 && row != 8);
-        printf("You choose row %d.\n", row);
     }
     return row;
 }
 
 void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lifes) /*Play the Takuzu*/
 {
-    display_matrix1(s,game_grid);
+    display_matrix(s,game_grid);
     enter_value(s,mask,solution,game_grid,lifes);
+}
+
+void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int column, int value) /*Explain what is error made by the user*/
+{
+    if (column-1 >-1 && column-2 >-1 && game_grid[row][column-1] == game_grid[row][column-2] && game_grid[row][column-1] != 10 && game_grid[row][column-2] != 10)
+    {
+        printf("The two previous values in this row are the same. You must put another value after it.\n");
+    }
+    else
+    {
+        if (column+1 < s && column+2 < s && game_grid[row][column+1] == game_grid[row][column+2] && game_grid[row][column+1] != 10 && game_grid[row][column+2] != 10)
+        {
+            printf("The two next values in this row are the same. You must put another value before it.\n");
+        }
+        else
+        {
+            if (row-1 >-1 && row-2 > -1 && game_grid[row-1][column] == game_grid[row-2][column] && game_grid[row-1][column] != 10 && game_grid[row-2][column] != 10)
+            {
+                printf("The two previous values in this column are the same. You must put another value after it.\n");
+            }
+            else
+            {
+                if (row+1 < s && row+2 < s && game_grid[row+1][column] == game_grid[row+2][column] && game_grid[row+1][column] != 10 && game_grid[row+2][column] != 10)
+                {
+                    printf("The two next values in this column are the same. You must put another value before it.\n");
+                }
+                else
+                {
+                    if (column+1 < s && column-1 >-1 && game_grid[row][column-1] == game_grid[row][column+1] && game_grid[row][column-1] != 10 && game_grid[row][column+1] != 10)
+                    {
+                        printf("The two values around are the same. You must put another value in the middle.\n");
+                    }
+                    else
+                    {
+                        if (row+1 < s && row-1 >-1 && game_grid[row-1][column] == game_grid[row+1][column] && game_grid[row-1][column] != 10 && game_grid[row+1][column] != 10)
+                        {
+                            printf("The two values above and below are the same. You must put another value in the middle.\n");
+                        }
+                        else
+                        {
+                            printf("Your move could be right but do not correspond to the solution grid.\n");
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /*Work in progress*/
@@ -238,19 +281,10 @@ void menu() /*The main menu function*/
     printf("Hello player, welcome to Takuzu !\n");
     int s, choice;
     s = size();
-    int solution[4][4]={
-            {1, 0, 0, 1},
-            {1, 0, 1, 0},
-            {0, 1, 1, 0},
-            {0, 1, 0, 1}
-    };
-    int mask[4][4]={
-            {1, 0, 0, 0},
-            {0, 0, 1, 0},
-            {1, 0, 1, 1},
-            {0, 1, 0, 0}
-    };
+    int solution[s][s];
+    int mask[s][s];
     int game_grid[s][s];
+    generate_matrix(s,solution,mask);
 
     do{
         printf("Do you want to :\n - Enter a mask manually (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)");
@@ -276,48 +310,67 @@ void menu() /*The main menu function*/
     }
 }
 
-void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int column, int value)
+
+void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two matrices (solution and mask) according to the size using a library of solution and mask matrices*/
 {
-    if (column-1 >-1 && column-2 >-1 && game_grid[row][column-1] == game_grid[row][column-2])
+    int r;
+    srand(time(0));
+    r = (rand()%2); /*Generate a random number*/
+    printf("%d\n",r);
+    if (s==4)
     {
-        printf("The two previous values in this row are the same. You must put another value after it.\n");
-    }
-    else
-    {
-        if (column+1 < s && column+2 < s && game_grid[row][column+1] == game_grid[row][column+2])
+        int solution1[4][4]={
+                {1, 0, 0, 1},
+                {1, 0, 1, 0},
+                {0, 1, 1, 0},
+                {0, 1, 0, 1}
+        };
+        int mask1[4][4]={
+                {1, 0, 0, 0},
+                {0, 0, 1, 0},
+                {1, 0, 1, 1},
+                {0, 1, 0, 0}
+        };
+        int solution2[4][4]={
+                {0, 1, 1, 0},
+                {1, 0, 0, 1},
+                {0, 0, 1, 1},
+                {1, 1, 0, 0}
+        };
+        int mask2[4][4]={
+                {0, 1, 0, 1},
+                {0, 0, 1, 0},
+                {0, 1, 0, 0},
+                {1, 1, 0, 1}
+        };
+        if(r==0)
         {
-            printf("The two next values in this row are the same. You must put another value before it.\n");
+            for (int i = 0; i < s; i++) {
+                for (int j = 0; j < s; j++) {
+                    solution[i][j] = solution1[i][j];
+                    mask[i][j] = mask1[i][j];
+                }
+            }
         }
         else
         {
-            if (row-1 >-1 && row-2 > -1 && game_grid[row-1][column] == game_grid[row-2][column])
+            if(r==1)
             {
-                printf("The two previous values in this column are the same. You must put another value after it.\n");
-            }
-            else
-            {
-                if (row+1 < s && row+2 < s && game_grid[row+1][column] == game_grid[row+2][column])
-                {
-                    printf("The two next values in this column are the same. You must put another value before it.\n");
-                }
-                else
-                {
-                    if (column+1 < s && column-2 >-1 && game_grid[row][column-1] == game_grid[row][column+1])
-                    {
-                        printf("The two values around are the same. You must put another value in the middle.\n");
-                    }
-                    else
-                    {
-                        if (game_grid[row-1][column] == game_grid[row+1][column])
-                        {
-                            printf("The two values above and below are the same. You must put another value in the middle.\n");
-                        }
+                for (int i = 0; i < s; i++) {
+                    for (int j = 0; j < s; j++) {
+                        solution[i][j] = solution2[i][j];
+                        mask[i][j] = mask2[i][j];
                     }
                 }
             }
         }
     }
+    else
+    {
+
+    }
 }
+
 
 /* To be done*/
 
