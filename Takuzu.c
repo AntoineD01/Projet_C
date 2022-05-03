@@ -21,7 +21,7 @@ void display_matrix1(int s, int grid[s][s]) /*Display the matrix*/
 {
     for (int i=0; i<s; i++) {
         for (int j = 0; j < s; j++) {
-            if (grid[i][j] != 0 && grid[i][j] != 1) {
+            if (grid[i][j] == 10) {
                 if (j != s - 1) {
                     printf("  ");
                 }
@@ -40,6 +40,38 @@ void display_matrix1(int s, int grid[s][s]) /*Display the matrix*/
             }
         }
     }
+}
+
+void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s]) /*Create the grid for the user*/
+{
+    for (int i=0; i<s; i++) {
+        for (int j = 0; j < s; j++)
+        {
+            if (mask[i][j] == 1)
+            {
+                game_grid[i][j] = solution[i][j];
+            }
+            else
+            {
+                game_grid[i][j] = 10;
+            }
+        }
+    }
+}
+
+int empty(int s, int grid[s][s], int row, int column ) /*Look if the cell is empty*/
+{
+    int valid;
+
+    if (grid[row][column] == 10)
+    {
+        valid = 1;
+    }
+    else
+    {
+        valid = 0;
+    }
+    return valid;
 }
 
 int conv_l_to_nb(int s,int column) /*Transform the column to a value*/
@@ -61,75 +93,7 @@ int conv_l_to_nb(int s,int column) /*Transform the column to a value*/
     return j;
 }
 
-void display_matrix(int s, int mask[s][s], int solution[s][s]) /*Display the matrix using mask and solution*/
-{
-    for (int i=0; i<s; i++)
-    {
-        for (int j=0; j<s; j++)
-        {
-            if (mask[i][j]==1)
-            {
-                if (j!=s-1)
-                {
-                    printf("%d ",solution[i][j]);
-                }
-                else
-                {
-                    printf("%d\n",solution[i][j]);
-                }
-            }
-            else
-            {
-                if (j!=s-1)
-                {
-                    printf("  ");
-                }
-                else
-                {
-                    printf("\n");
-                }
-            }
-        }
-    }
-}
-
-int empty(int s, int mask[s][s], int row, int column ) /*Look if the cell is empty*/
-{
-    int valid;
-
-    if (mask[row][column] == 0)
-    {
-        valid = 1;
-    }
-    else
-    {
-        valid = 0;
-    }
-    return valid;
-}
-
 /*Work in progress*/
-
-void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s])
-{
-    for (int i=0; i<s; i++) {
-        for (int j = 0; j < s; j++)
-        {
-            if (mask[i][j] == 1)
-            {
-                game_grid[i][j] = solution[i][j];
-            }
-            else
-            {
-                game_grid[i][j] = 5;
-            }
-        }
-    }
-}
-
-
-
-
 
 void menu() /*The main menu function*/
 {
@@ -167,18 +131,20 @@ void menu() /*The main menu function*/
         }
         else
         {
-            play(s,mask, solution);
+            game_grid_c(s,mask,solution, game_grid);
+            play(s,mask, solution,game_grid);
         }
     }
 }
 
-void play(int s, int mask[s][s], int solution[s][s]) /*Play the Takuzu*/
+
+void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s]) /*Play the Takuzu*/
 {
-    display_matrix(s,mask,solution);
-    enter_value(s,mask,solution);
+    display_matrix1(s,game_grid);
+    enter_value(s,mask,solution,game_grid);
 }
 
-void enter_value(int s, int mask[s][s], int solution[s][s])
+void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s])
 {
     char column;
     int row,value,j;
@@ -200,16 +166,15 @@ void enter_value(int s, int mask[s][s], int solution[s][s])
         printf("You choose row %d.\n", row);
         row-=1;  /*Convert the value given by the user to the real row in the matrix*/
 
-        valid = empty(4, mask, row, j); /*Check if the cell is empty*/
+        valid = empty(s, game_grid, row, j); /*Check if the cell is empty*/
 
-        printf(" Row = %d\n column = %d\n Valid= %d\n",row,j,valid); /* TO BE REMOVED*/
+        printf(" Row = %d\n column = %d\n Valid = %d\n",row,j,valid); /* TO BE REMOVED*/
 
-        /*NOT WORKING*/
+
         if (valid == 0) /*If the cell is not empty*/
         {
-            printf("The cell is not empty\n Try again :\n");
-            display_matrix(4,mask,solution);
-            play(s,mask, solution);
+            printf("The cell is not empty.\nTry again :\n");
+            play(s,mask, solution,game_grid);
         }
         else /*If the cell is empty*/
         {
@@ -218,12 +183,26 @@ void enter_value(int s, int mask[s][s], int solution[s][s])
                 scanf("%d", &value);
             } while (value != 1 && value != 0);
             printf("You want to enter %d at the coordinate %c%d.\n", value, column, row);
-            printf("%d",solution[row][j]);
+            game_grid[row][j] = value;
+
+            play(s,mask,solution,game_grid);
         }
     }
 }
 
-
+int validity(int s, int solution[s][s], int game_grid[s][s],int row, int column) /*Check if the value entered is valid*/
+{
+    int validity;
+    if (game_grid[row][column] == solution[row][column])
+    {
+        validity = 1;
+    }
+    else
+    {
+        validity = 0;
+    }
+    return validity;
+}
 
 
 
