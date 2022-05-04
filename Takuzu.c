@@ -112,13 +112,13 @@ int conv_l_to_nb(int s,int column) /*Transform the column to a value*/
     return j;
 }
 
-void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lifes)
+void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lifes) /*Put the value in the cell requested by the user*/
 {
     char column;
     int row,value,j,valid,same_solution,full1;
     full1 = full(s,game_grid);
 
-    if (full1 == 0)
+    if (full1 == 0) /*If the grid is not full*/
     {
         column = ask_column(s);
         j = conv_l_to_nb(s, column); /*Convert the letter given by the user to the real column in the matrix*/
@@ -142,30 +142,30 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
             same_solution = validity(s,solution,game_grid,row,j,value);
 
 
-            if (same_solution == 1)
+            if (same_solution == 1) /*If the value correspond to the solution grid*/
             {
                 game_grid[row][j] = value;
                 printf("You want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row);
             }
             else
             {
-                why_wrong(s,solution,game_grid,row,j,value);
+                why_wrong(s,solution,game_grid,row,j,value); /*Explain the error*/
                 lifes-=1;
                 printf("You lost one life. You have now %d.\n\n",lifes);
             }
 
-            if (lifes !=0)
+            if (lifes !=0) /*If no lifes left*/
             {
                 play(s,mask,solution,game_grid, lifes);
             }
             else
             {
-                printf("You've lost ! Try again !\n\n");
+                printf("You've lost ! Try again !\n\n"); /*If there is some lifes left*/
                 menu();
             }
         }
     }
-    else
+    else /*If the grid is full*/
     {
         printf("You've finished this grid, well done !\n\n");
         menu();
@@ -188,7 +188,7 @@ int validity(int s, int solution[s][s], int game_grid[s][s],int row, int column,
     return validity;
 }
 
-char ask_column(int s)
+char ask_column(int s) /*Ask the user in which column he wants to put his value*/
 {
     char column;
     if (s==4)
@@ -211,7 +211,7 @@ char ask_column(int s)
     return column;
 }
 
-int ask_row(int s)
+int ask_row(int s) /*Ask the user in which row he wants to put his value*/
 {
     int row;
     if (s==4)
@@ -284,10 +284,6 @@ void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int colum
     }
 }
 
-
-/*Work in progress*/
-
-
 int full(int s, int grid[s][s])
 {
     int full = 1;
@@ -304,8 +300,7 @@ int full(int s, int grid[s][s])
     return full;
 }
 
-
-
+/*Work in progress*/
 
 void menu() /*The main menu function*/
 {
@@ -349,36 +344,60 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
     r = (rand()%2); /*Generate a random number*/
     if (s==4)
     {
-        int solution1[4][4]={
+        int solution14[4][4]={
                 {1, 0, 0, 1},
                 {1, 0, 1, 0},
                 {0, 1, 1, 0},
                 {0, 1, 0, 1}
         };
-        int mask1[4][4]={
+        int mask14[4][4]={
                 {1, 0, 0, 0},
                 {0, 0, 1, 0},
                 {1, 0, 1, 1},
                 {0, 1, 0, 0}
         };
-        int solution2[4][4]={
+        int solution24[4][4]={
                 {0, 1, 1, 0},
                 {1, 0, 0, 1},
                 {0, 0, 1, 1},
                 {1, 1, 0, 0}
         };
-        int mask2[4][4]={
+        int mask24[4][4]={
                 {0, 1, 0, 1},
                 {0, 0, 1, 0},
                 {0, 1, 0, 0},
                 {1, 1, 0, 1}
         };
+        int solution34[4][4]={
+                {0, 1, 1, 0},
+                {0, 1, 0, 1},
+                {1, 0, 1, 1},
+                {1, 1, 0, 0}
+        };
+        int mask34[4][4]={
+                {0, 1, 0, 1},
+                {0, 1, 1, 0},
+                {0, 0, 0, 1},
+                {1, 1, 0, 1}
+        };
+        int solution44[4][4]={
+                {0, 1, 1, 0},
+                {1, 1, 0, 1},
+                {1, 0, 1, 0},
+                {0, 1, 0, 1}
+        };
+        int mask44[4][4]={
+                {0, 1, 0, 1},
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {1, 0, 1, 1}
+        };
         if(r==0)
         {
             for (int i = 0; i < s; i++) {
                 for (int j = 0; j < s; j++) {
-                    solution[i][j] = solution1[i][j];
-                    mask[i][j] = mask1[i][j];
+                    solution[i][j] = solution14[i][j];
+                    mask[i][j] = mask14[i][j];
                 }
             }
         }
@@ -388,8 +407,32 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
             {
                 for (int i = 0; i < s; i++) {
                     for (int j = 0; j < s; j++) {
-                        solution[i][j] = solution2[i][j];
-                        mask[i][j] = mask2[i][j];
+                        solution[i][j] = solution24[i][j];
+                        mask[i][j] = mask24[i][j];
+                    }
+                }
+            }
+            else
+            {
+                if (r==2)
+                {
+                    for (int i = 0; i < s; i++) {
+                        for (int j = 0; j < s; j++) {
+                            solution[i][j] = solution34[i][j];
+                            mask[i][j] = mask34[i][j];
+                        }
+                    }
+                }
+                else
+                {
+                    if (r==3)
+                    {
+                        for (int i = 0; i < s; i++) {
+                            for (int j = 0; j < s; j++) {
+                                solution[i][j] = solution44[i][j];
+                                mask[i][j] = mask44[i][j];
+                            }
+                        }
                     }
                 }
             }
@@ -397,7 +440,131 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
     }
     else
     {
-
+        int solution18[8][8]={
+                {1, 0, 1, 1, 0,1 ,0,0},
+                {1, 0, 1, 0, 1,0 ,0,1},
+                {0, 1, 0, 1, 1,0 ,1,0},
+                {0, 1, 0, 1, 0,1 ,1,0},
+                {1, 0, 1, 0, 0,1 ,0,1},
+                {0, 1, 0, 0, 1,0 ,1,1},
+                {0, 0, 1, 1, 0,1 ,1,0},
+                {1, 1, 0, 0, 1,0 ,0,1},
+        };
+        int mask18[8][8]={
+                {1, 0, 1, 1, 0,1 ,0,1},
+                {0, 0, 1, 0, 0,0 ,0,0},
+                {1, 0, 0, 0, 0,0 ,0,1},
+                {1, 0, 1, 0, 0,1 ,1,0},
+                {1, 0, 0, 0, 1,0 ,0,1},
+                {0, 0, 0, 0, 1,0 ,0,0},
+                {0, 1, 1, 1, 1,1 ,0,0},
+                {0, 1, 0, 1, 0,0 ,1,0},
+        };
+        int solution28[8][8]={
+                {0, 0, 1, 0, 1, 0, 1, 1},
+                {1, 0, 0, 1, 0, 1, 0, 1},
+                {0, 1, 0, 1, 1, 0, 1, 0},
+                {0, 1, 1, 0, 0, 1, 1, 0},
+                {1, 0, 1, 0, 0, 1, 0, 1},
+                {1, 0, 0, 1, 1, 0, 0, 1},
+                {0, 1, 1, 0, 1, 0, 1, 0},
+                {1, 1, 0, 1, 0, 1, 0, 0},
+        };
+        int mask28[8][8]={
+                {1, 1, 1, 1, 1, 1, 0, 0},
+                {1, 0, 1, 0, 1, 0, 0, 0},
+                {1, 1, 1, 0, 0, 0, 1, 0},
+                {1, 0, 0, 0, 1, 0, 1, 0},
+                {1, 0, 0, 0, 0, 1, 0, 0},
+                {0, 1, 1, 1, 1, 1, 1, 0},
+                {0, 0, 0, 0, 0, 0, 0, 1},
+                {0, 0, 1, 0, 0, 0, 1, 1},
+        };
+        int solution38[8][8]={
+                {1, 0, 0, 1, 0, 1, 0, 1},
+                {0, 0, 1, 1, 0, 0, 1, 1},
+                {1, 1, 0, 0, 1, 1, 0, 0},
+                {1, 1, 0, 1, 0, 1, 0, 0},
+                {0, 0, 1, 0, 1, 0, 1, 1},
+                {0, 0, 1, 1, 0, 1, 0, 1},
+                {1, 1, 0, 0, 1, 0, 1, 0},
+                {0, 1, 1, 0, 1, 0, 1, 0},
+        };
+        int mask38[8][8]={
+                {0, 1, 1, 0, 1, 0, 0, 1},
+                {0, 0, 0, 0, 1, 0, 0, 1},
+                {0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {1, 1, 0, 0, 1, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 1, 1},
+                {1, 0, 1, 1, 0, 0, 1, 0},
+                {0, 1, 1, 0, 0, 1, 0, 0},
+        };
+        int solution48[8][8]={
+                {1, 1, 0, 1, 0, 1, 0, 0},
+                {1, 0, 1, 0, 1, 0, 0, 1},
+                {0, 1, 0, 1, 0, 0, 1, 1},
+                {0, 1, 1, 0, 0, 1, 1, 0},
+                {1, 0, 1, 0, 1, 1, 0, 0},
+                {1, 0, 0, 1, 1, 0, 0, 1},
+                {0, 1, 0, 1, 0, 1, 1, 0},
+                {0, 0, 1, 0, 1, 0, 1, 1},
+        };
+        int mask48[8][8]={
+                {0, 1, 1 ,1, 1, 0, 1, 0},
+                {0, 1, 0 ,0, 0, 0, 1, 1},
+                {1, 1, 0 ,0, 0, 1, 0, 0},
+                {1, 0, 0 ,1, 1, 1, 0, 0},
+                {1, 1, 0 ,0, 1, 0, 1, 1},
+                {0, 1, 1 ,0, 0, 0, 1, 0},
+                {0, 0, 0 ,0, 0, 0, 0, 0},
+                {0, 0, 0 ,0, 1, 0, 0, 0},
+        };
+        if(r==0)
+        {
+            for (int i = 0; i < s; i++) {
+                for (int j = 0; j < s; j++) {
+                    solution[i][j] = solution18[i][j];
+                    mask[i][j] = mask18[i][j];
+                }
+            }
+        }
+        else
+        {
+            if (r==1)
+            {
+                for (int i = 0; i < s; i++) {
+                    for (int j = 0; j < s; j++) {
+                        solution[i][j] = solution28[i][j];
+                        mask[i][j] = mask28[i][j];
+                    }
+                }
+            }
+            else
+            {
+                if (r==2)
+                {
+                    for (int i = 0; i < s; i++) {
+                        for (int j = 0; j < s; j++) {
+                            solution[i][j] = solution38[i][j];
+                            mask[i][j] = mask38[i][j];
+                        }
+                    }
+                }
+                else
+                {
+                    if (r==3)
+                    {
+                        for (int i = 0; i < s; i++) {
+                            for (int j = 0; j < s; j++) {
+                                solution[i][j] = solution48[i][j];
+                                mask[i][j] = mask48[i][j];
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
