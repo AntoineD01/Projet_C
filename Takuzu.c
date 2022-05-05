@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 /*Already done*/
 
@@ -13,9 +14,10 @@ int size() /*Ask for the size of the Takuzu that the user wants*/
 {
     int size;
     do {
-        printf("Type the size of Takuzu that you want (only 4 and 8 are available): \n");
+        printf("Type the size of Takuzu that you want (only 4*4 and 8*8 are available): \n");
         scanf("%d",&size);
     }while(size != 4 && size != 8);
+
     return(size);
 }
 
@@ -115,13 +117,24 @@ int conv_l_to_nb(int s,int column) /*Transform the column to a value*/
 void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lifes) /*Put the value in the cell requested by the user*/
 {
     char column;
-    int row,value,j,valid,same_solution,full1;
+    int row,value,j,valid,same_solution,full1,back;
     full1 = full(s,game_grid);
 
     if (full1 == 0) /*If the grid is not full*/
     {
+        do{
+            printf("\nWhat do you want to do next ?\n - Enter another value (press 1)\n - Go back to the main menu (press 2)\n");
+            scanf("%d",&back);
+        }while (back != 1 && back != 2);
+
+        if (back == 2)
+        {
+            printf("\nYou're back in the main menu.\n\n");
+            menu();
+        }
         column = ask_column(s);
         j = conv_l_to_nb(s, column); /*Convert the letter given by the user to the real column in the matrix*/
+
 
         row = ask_row(s);
         row-=1;  /*Convert the value given by the user to the real row in the matrix*/
@@ -195,7 +208,7 @@ char ask_column(int s) /*Ask the user in which column he wants to put his value*
     {
         do { /*Ask for the column if 4*4*/
             printf("Enter the column of the value you want to enter (A to D): \n");
-            scanf("%c", &column);
+            scanf(" %c", &column);
         } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'a' && column != 'b' &&
                  column != 'c' && column != 'd');
     }
@@ -203,7 +216,7 @@ char ask_column(int s) /*Ask the user in which column he wants to put his value*
     {
         do { /*Ask for the column if 8*8*/
             printf("Enter the column of the value you want to enter (A to H): \n");
-            scanf("%c", &column);
+            scanf(" %c", &column);
         } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'E' && column != 'F' &&
                  column != 'G' && column != 'H' && column != 'a' && column != 'b' && column != 'c' && column != 'd' && column != 'e' && column != 'f' &&
                  column != 'g' && column != 'h');
@@ -284,7 +297,7 @@ void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int colum
     }
 }
 
-int full(int s, int grid[s][s])
+int full(int s, int grid[s][s]) /*Look if the grid is full or not*/
 {
     int full = 1;
     for (int i=0; i<s; i++){
@@ -299,43 +312,6 @@ int full(int s, int grid[s][s])
     }
     return full;
 }
-
-/*Work in progress*/
-
-void menu() /*The main menu function*/
-{
-    printf("Hello player, welcome to Takuzu !\n");
-    int s, choice;
-    s = size();
-    int solution[s][s];
-    int mask[s][s];
-    int game_grid[s][s];
-    generate_matrix(s,solution,mask);
-
-    do{
-        printf("Do you want to :\n - Enter a mask manually (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)");
-        scanf("%d",&choice);
-    }while(choice != 1 && choice != 2 && choice != 3);
-
-    if (choice==1)
-    {
-        enter_mask(s,mask);
-    }
-    else
-    {
-        if (choice==2)
-        {
-            generate_mask(s,mask);
-        }
-        else
-        {
-            int lifes = 3;
-            game_grid_c(s,mask,solution, game_grid);
-            play(s,mask, solution,game_grid,lifes);
-        }
-    }
-}
-
 
 void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two matrices (solution and mask) according to the size using a library of solution and mask matrices*/
 {
@@ -568,16 +544,53 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
     }
 }
 
+/*Work in progress*/
+
+void menu() /*The main menu function*/
+{
+    int s, choice;
+    s = size();
+    int solution[s][s];
+    int mask[s][s];
+    int game_grid[s][s];
+    generate_matrix(s,solution,mask);
+
+    do{
+        printf("Do you want to :\n - Enter a mask manually (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)");
+        scanf("%d",&choice);
+    }while(choice != 1 && choice != 2 && choice != 3);
+
+    if (choice==1)
+    {
+        enter_mask(s,mask);
+    }
+    else
+    {
+        if (choice==2)
+        {
+            generate_mask(s,mask);
+        }
+        else
+        {
+            int lifes = 3;
+            game_grid_c(s,mask,solution, game_grid);
+            play(s,mask, solution,game_grid,lifes);
+        }
+    }
+}
+
 
 /* To be done*/
 
-void generate_mask(int s,int m[s][s]) /*Generate a mask*/
+void generate_mask(int s,int mask[s][s]) /*Generate a mask*/
 {
-    printf("TO BE DONE");
+    printf("TO BE DONE\n");
+    menu();
 }
 
 
 void enter_mask(int s, int mask[s][s])
 {
-    printf("TO BE DONE");
+    printf("TO BE DONE\n");
+    menu();
 }

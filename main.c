@@ -5,6 +5,6 @@
 
 int main()
 {
+    printf("Hello player, welcome to Takuzu !\n");
     menu();
 }
-
