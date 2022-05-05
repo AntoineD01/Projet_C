@@ -78,7 +78,7 @@ int empty(int s, int grid[s][s], int row, int column ) /*Look if the cell is emp
     return valid;
 }
 
-int conv_l_to_nb(int s,int column) /*Transform the column to a value*/
+int conv_l_to_nb(int s,char column) /*Transform the column to a value*/
 {
     int j;
     if (column == 'a' || column == 'A') {
@@ -123,60 +123,71 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
     if (full1 == 0) /*If the grid is not full*/
     {
         do{
-            printf("\nWhat do you want to do next ?\n - Enter another value (press 1)\n - Go back to the main menu (press 2)\n");
+            printf("\nWhat do you want to do next ?\n - Enter another value (press 1)\n - Have a hint on a value in the grid (press 2)\n - Go back to the main menu (press 3)\n");
             scanf("%d",&back);
-        }while (back != 1 && back != 2);
+        }while (back != 1 && back != 2 && back != 3);
 
-        if (back == 2)
+        if (back == 3)
         {
             printf("\nYou're back in the main menu.\n\n");
             menu();
         }
-        column = ask_column(s);
-        j = conv_l_to_nb(s, column); /*Convert the letter given by the user to the real column in the matrix*/
-
-
-        row = ask_row(s);
-        row-=1;  /*Convert the value given by the user to the real row in the matrix*/
-
-        valid = empty(s, game_grid, row, j); /*Check if the cell is empty*/
-
-        if (valid == 0) /*If the cell is not empty*/
+        else
         {
-            printf("The cell is not empty.\nTry again :\n");
-            play(s,mask, solution,game_grid,lifes);
-        }
-        else /*If the cell is empty*/
-        {
-            do {
-                printf("Enter the value you want to enter (1 or 0): \n");
-                scanf("%d", &value);
-            } while (value != 1 && value != 0);
-            same_solution = validity(s,solution,game_grid,row,j,value);
-
-
-            if (same_solution == 1) /*If the value correspond to the solution grid*/
+            if (back == 2)
             {
-                game_grid[row][j] = value;
-                printf("You want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row);
+                hint(s,solution,game_grid);
             }
             else
             {
-                why_wrong(s,solution,game_grid,row,j,value); /*Explain the error*/
-                lifes-=1;
-                printf("You lost one life. You have now %d.\n\n",lifes);
-            }
+                column = ask_column(s);
+                j = conv_l_to_nb(s, column); /*Convert the letter given by the user to the real column in the matrix*/
 
-            if (lifes !=0) /*If no lifes left*/
-            {
-                play(s,mask,solution,game_grid, lifes);
-            }
-            else
-            {
-                printf("You've lost ! Try again !\n\n"); /*If there is some lifes left*/
-                menu();
+
+                row = ask_row(s);
+                row-=1;  /*Convert the value given by the user to the real row in the matrix*/
+
+                valid = empty(s, game_grid, row, j); /*Check if the cell is empty*/
+
+                if (valid == 0) /*If the cell is not empty*/
+                {
+                    printf("The cell is not empty.\nTry again :\n");
+                    play(s,mask, solution,game_grid,lifes);
+                }
+                else /*If the cell is empty*/
+                {
+                    do {
+                        printf("Enter the value you want to enter (1 or 0): \n");
+                        scanf("%d", &value);
+                    } while (value != 1 && value != 0);
+                    same_solution = validity(s,solution,game_grid,row,j,value);
+
+
+                    if (same_solution == 1) /*If the value correspond to the solution grid*/
+                    {
+                        game_grid[row][j] = value;
+                        printf("You want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row);
+                    }
+                    else
+                    {
+                        why_wrong(s,solution,game_grid,row,j,value); /*Explain the error*/
+                        lifes-=1;
+                        printf("You lost one life. You have now %d.\n\n",lifes);
+                    }
+
+                    if (lifes !=0) /*If no lifes left*/
+                    {
+                        play(s,mask,solution,game_grid, lifes);
+                    }
+                    else
+                    {
+                        printf("You've lost ! Try again !\n\n"); /*If there is some lifes left*/
+                        menu();
+                    }
+                }
             }
         }
+
     }
     else /*If the grid is full*/
     {
@@ -544,8 +555,6 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
     }
 }
 
-/*Work in progress*/
-
 void menu() /*The main menu function*/
 {
     int s, choice;
@@ -579,6 +588,64 @@ void menu() /*The main menu function*/
     }
 }
 
+/*Work in progress*/
+
+void hint(int s,int solution[s][s],int game_grid[s][s])
+{
+    int row,column1,hint_value;
+    char column;
+    for (int i=0; i<s;i++)
+    {
+        for (int j=0; j<s;j++)
+        {
+            if (game_grid[i][j] == 10)
+            {
+                row = i;
+                column1 = j;
+                hint_value = solution[i][j];
+                break;
+            }
+        }
+    }
+    column = conv_nb_to_l(s,column1);
+    printf("I have a hint for you !\nThe value at %c%d is %d.",column,row,hint_value);
+}
+
+int conv_nb_to_l(int s,int column) /*Transform the column to a char*/
+{
+    int j;
+    if (column == 1) {
+        j = 'A';
+    } else {
+        if (column == 2) {
+            j = 'B';
+        } else {
+            if (column == 3) {
+                j = 'C';
+            } else {
+                if (column == 4) {
+                    j = 'D';
+                } else {
+                    if (column == 5) {
+                        j = 'E';
+                    } else {
+                        if (column == 6) {
+                            j = 'F';
+                        } else {
+                            if (column == 7){
+                                j = 'G';
+                            }
+                            else{
+                                j = 'H';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return j;
+}
 
 /* To be done*/
 
