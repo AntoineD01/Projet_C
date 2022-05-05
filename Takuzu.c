@@ -63,7 +63,7 @@ void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s])
     }
 }
 
-int empty(int s, int grid[s][s], int row, int column ) /*Look if the cell is empty*/
+int empty(int s, int grid[s][s], int row, int column) /*Look if the cell is empty*/
 {
     int valid;
 
@@ -114,10 +114,11 @@ int conv_l_to_nb(int s,char column) /*Transform the column to a value*/
     return j;
 }
 
-void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lifes) /*Put the value in the cell requested by the user*/
+void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lives) /*Put the value in the cell requested by the user*/
 {
     char column;
     int row,value,j,valid,same_solution,full1,back;
+    int stop = 3;
     full1 = full(s,game_grid);
 
     if (full1 == 0) /*If the grid is not full*/
@@ -136,7 +137,16 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
         {
             if (back == 2)
             {
-                hint(s,solution,game_grid);
+                if (stop != 0)
+                {
+                    hint(s,solution,game_grid,mask,stop,lives);
+                    stop-=1;
+                }
+                else
+                {
+                    printf("You have no more hint...");
+                }
+
             }
             else
             {
@@ -152,7 +162,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                 if (valid == 0) /*If the cell is not empty*/
                 {
                     printf("The cell is not empty.\nTry again :\n");
-                    play(s,mask, solution,game_grid,lifes);
+                    play(s,mask, solution,game_grid,lives);
                 }
                 else /*If the cell is empty*/
                 {
@@ -171,17 +181,17 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                     else
                     {
                         why_wrong(s,solution,game_grid,row,j,value); /*Explain the error*/
-                        lifes-=1;
-                        printf("You lost one life. You have now %d.\n\n",lifes);
+                        lives-=1;
+                        printf("You lost one life. You have now %d.\n\n",lives);
                     }
 
-                    if (lifes !=0) /*If no lifes left*/
+                    if (lives !=0) /*If no lifes left*/
                     {
-                        play(s,mask,solution,game_grid, lifes);
+                        play(s,mask,solution,game_grid, lives);
                     }
                     else
                     {
-                        printf("You've lost ! Try again !\n\n"); /*If there is some lifes left*/
+                        printf("You've lost ! Try again !\n\n"); /*If there is some lives left*/
                         menu();
                     }
                 }
@@ -218,7 +228,7 @@ char ask_column(int s) /*Ask the user in which column he wants to put his value*
     if (s==4)
     {
         do { /*Ask for the column if 4*4*/
-            printf("Enter the column of the value you want to enter (A to D): \n");
+            printf("Enter the column of the value you want (A to D): \n");
             scanf(" %c", &column);
         } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'a' && column != 'b' &&
                  column != 'c' && column != 'd');
@@ -226,7 +236,7 @@ char ask_column(int s) /*Ask the user in which column he wants to put his value*
     else
     {
         do { /*Ask for the column if 8*8*/
-            printf("Enter the column of the value you want to enter (A to H): \n");
+            printf("Enter the column of the value you want (A to H): \n");
             scanf(" %c", &column);
         } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'E' && column != 'F' &&
                  column != 'G' && column != 'H' && column != 'a' && column != 'b' && column != 'c' && column != 'd' && column != 'e' && column != 'f' &&
@@ -241,24 +251,24 @@ int ask_row(int s) /*Ask the user in which row he wants to put his value*/
     if (s==4)
     {
         do { /*Ask for the row*/
-            printf("Enter the row of the value you want to enter (1 to 4): \n");
+            printf("Enter the row of the value you want (1 to 4): \n");
             scanf("%d", &row);
         } while (row != 1 && row != 2 && row != 3 && row != 4);
     }
     else
     {
         do { /*Ask for the row*/
-            printf("Enter the row of the value you want to enter (1 to 8): \n");
+            printf("Enter the row of the value you want (1 to 8): \n");
             scanf("%d", &row);
         } while (row != 1 && row != 2 && row != 3 && row != 4 && row != 5 && row != 6 && row != 7 && row != 8);
     }
     return row;
 }
 
-void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lifes) /*Play the Takuzu*/
+void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives) /*Play the Takuzu*/
 {
     display_matrix(s,game_grid);
-    enter_value(s,mask,solution,game_grid,lifes);
+    enter_value(s,mask,solution,game_grid,lives);
 }
 
 void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int column, int value) /*Explain what is error made by the user*/
@@ -581,71 +591,38 @@ void menu() /*The main menu function*/
         }
         else
         {
-            int lifes = 3;
+            int lives = 3;
             game_grid_c(s,mask,solution, game_grid);
-            play(s,mask, solution,game_grid,lifes);
+            play(s,mask, solution,game_grid,lives);
         }
     }
 }
 
 /*Work in progress*/
 
-void hint(int s,int solution[s][s],int game_grid[s][s])
+void hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, int lives)
 {
-    int row,column1,hint_value;
-    char column;
-    for (int i=0; i<s;i++)
+    char column1 = ask_column(s);
+    int column = conv_l_to_nb(s,column1);
+
+    int row = ask_row(s);
+    row-=1;
+
+    int hint_value, empty1;
+    empty1 = empty(s,game_grid,row,column);
+
+    if (empty1==1)
     {
-        for (int j=0; j<s;j++)
-        {
-            if (game_grid[i][j] == 10)
-            {
-                row = i;
-                column1 = j;
-                hint_value = solution[i][j];
-                break;
-            }
-        }
+        hint_value = solution[row][column];
+        printf("The value at %c%d is %d.\n",column1,row+1,hint_value);
     }
-    column = conv_nb_to_l(s,column1);
-    printf("I have a hint for you !\nThe value at %c%d is %d.",column,row,hint_value);
+    else
+    {
+        printf("The cell %c%d is not empty so you already know it's value !\n\n",column1,row+1);
+        play(s,mask,solution,game_grid,lives);
+    }
 }
 
-int conv_nb_to_l(int s,int column) /*Transform the column to a char*/
-{
-    int j;
-    if (column == 1) {
-        j = 'A';
-    } else {
-        if (column == 2) {
-            j = 'B';
-        } else {
-            if (column == 3) {
-                j = 'C';
-            } else {
-                if (column == 4) {
-                    j = 'D';
-                } else {
-                    if (column == 5) {
-                        j = 'E';
-                    } else {
-                        if (column == 6) {
-                            j = 'F';
-                        } else {
-                            if (column == 7){
-                                j = 'G';
-                            }
-                            else{
-                                j = 'H';
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return j;
-}
 
 /* To be done*/
 
