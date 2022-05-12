@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
-#include <unistd.h>
 
 
 int size() /*Ask for the size of the Takuzu that the user wants*/
