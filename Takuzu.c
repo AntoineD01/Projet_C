@@ -13,6 +13,7 @@ int size() /*Ask for the size of the Takuzu that the user wants*/
     int size;
     do {
         printf("Type the size of Takuzu that you want (only 4*4 and 8*8 are available): \n");
+        fflush(stdin);
         scanf("%d",&size);
     }while(size != 4 && size != 8);
 
@@ -112,6 +113,7 @@ char ask_column(int s) /*Ask the user in which column he wants to put his value*
     {
         do { /*Ask for the column if 4*4*/
             printf("Enter the column of the value you want (A to D): \n");
+            fflush(stdin);
             scanf(" %c", &column);
         } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'a' && column != 'b' &&
                  column != 'c' && column != 'd');
@@ -120,6 +122,7 @@ char ask_column(int s) /*Ask the user in which column he wants to put his value*
     {
         do { /*Ask for the column if 8*8*/
             printf("Enter the column of the value you want (A to H): \n");
+            fflush(stdin);
             scanf(" %c", &column);
         } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'E' && column != 'F' &&
                  column != 'G' && column != 'H' && column != 'a' && column != 'b' && column != 'c' && column != 'd' && column != 'e' && column != 'f' &&
@@ -135,6 +138,7 @@ int ask_row(int s) /*Ask the user in which row he wants to put his value*/
     {
         do { /*Ask for the row*/
             printf("Enter the row of the value you want (1 to 4): \n");
+            fflush(stdin);
             scanf("%d", &row);
         } while (row != 1 && row != 2 && row != 3 && row != 4);
     }
@@ -142,6 +146,7 @@ int ask_row(int s) /*Ask the user in which row he wants to put his value*/
     {
         do { /*Ask for the row*/
             printf("Enter the row of the value you want (1 to 8): \n");
+            fflush(stdin);
             scanf("%d", &row);
         } while (row != 1 && row != 2 && row != 3 && row != 4 && row != 5 && row != 6 && row != 7 && row != 8);
     }
@@ -427,6 +432,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
     {
         do{
             printf("\nWhat do you want to do next ?\n - Enter another value (press 1)\n - Have a hint on a value in the grid (press 2)\n - Go back to the main menu (press 3)\n");
+            fflush(stdin);
             scanf("%d",&back);
         }while (back != 1 && back != 2 && back != 3);
 
@@ -470,6 +476,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                 {
                     do {
                         printf("Enter the value you want to enter (1 or 0): \n");
+                        fflush(stdin);
                         scanf("%d", &value);
                     } while (value != 1 && value != 0);
                     same_solution = validity(s,solution,game_grid,row,j,value);
@@ -593,6 +600,7 @@ void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) /*Res
     display_matrix(s,game_grid);
     do{
         printf("Enter n to see the next resolution :");
+        fflush(stdin);
         scanf(" %c",&c);
     }while (c != 'n');
     c = 'a';
@@ -610,6 +618,7 @@ void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) /*Res
                     while (c != 'n')
                     {
                         printf("Enter n to see the next resolution :");
+                        fflush(stdin);
                         scanf(" %c",&c);
                     }
                     c = 'a';
@@ -621,7 +630,6 @@ void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) /*Res
     printf("\nYou're back to the main menu.\n");
     menu();
 }
-/*Work in progress*/
 
 void menu() /*The main menu function*/
 {
@@ -634,6 +642,7 @@ void menu() /*The main menu function*/
 
     do{
         printf("Do you want to :\n - Resolve automatically a grid (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)");
+        fflush(stdin);
         scanf("%d",&choice);
     }while(choice != 1 && choice != 2 && choice != 3);
 
@@ -657,7 +666,6 @@ void menu() /*The main menu function*/
     }
 }
 
-/* To be done*/
 
 void generate_mask(int s,int solution[s][s], int mask[s][s]) /*Display a grid and it mask*/
 {
