@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 int size() /*Ask for the size of the Takuzu that the user wants*/
 {
     int size;
@@ -62,31 +61,6 @@ int validity(int s, int solution[s][s], int game_grid[s][s],int row, int column,
         validity = 0;
     }
     return validity;
-}
-
-void display_matrix(int s, int grid[s][s]) /*Display the matrix*/
-{
-    for (int i=0; i<s; i++) {
-        for (int j = 0; j < s; j++) {
-            if (grid[i][j] == 10) {
-                if (j != s - 1) {
-                    printf("  ");
-                }
-                else {
-                    printf("\n");
-                }
-            }
-            else
-            {
-                if (j != s - 1) {
-                    printf("%d ", grid[i][j]);
-                }
-                else {
-                    printf("%d\n", grid[i][j]);
-                }
-            }
-        }
-    }
 }
 
 void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s]) /*Create the grid for the user*/
@@ -420,7 +394,6 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
     }
 }
 
-
 void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lives, int stop) /*Put the value in the cell requested by the user*/
 {
     char column;
@@ -451,7 +424,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                 }
                 else
                 {
-                    printf("You have no more hint...");
+                    printf("You have no more hint...\n");
                     enter_value(s,mask,solution,game_grid,lives,stop);
                 }
             }
@@ -563,7 +536,6 @@ void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int colum
     }
 }
 
-
 void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives, int stop) /*Play the Takuzu*/
 {
     display_matrix(s,game_grid);
@@ -644,7 +616,6 @@ void menu() /*The main menu function*/
     }
 }
 
-
 void generate_mask(int s,int solution[s][s], int mask[s][s]) /*Display a grid and it mask*/
 {
     printf("\nThis is the solution grid :\n\n");
@@ -721,4 +692,42 @@ int hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, 
     printf("The value at %c%d is %d.\n",columnl,row+1,hint_value);
     stop= stop-1;
     return stop;
+}
+
+void display_matrix(int s, int grid[s][s])  /*Display the matrix*/
+{
+    if (s==4)
+    {
+        printf("   A B C D\n");
+    }
+    else
+    {
+        printf("   A B C D E F G H\n");
+    }
+    for (int i=0; i<s; i++) {
+        for (int j = 0; j < s; j++) {
+            if (j==0)
+            {
+                printf("%d  ",i+1);
+            }
+            if (grid[i][j] == 10) {
+                if (j == s - 1) { //if it is not the last value of the row
+                    printf("\n");
+                }
+                else
+                {
+                    printf("  ");
+                }
+            }
+            else
+            {
+                if (j != s - 1) {
+                    printf("%d ", grid[i][j]);
+                }
+                else {
+                    printf("%d\n", grid[i][j]);
+                }
+            }
+        }
+    }
 }
