@@ -579,62 +579,6 @@ void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) /*Res
     menu();
 }
 
-void menu() /*The main menu function*/
-{
-    int s, choice, c;
-    s = size();
-    int solution[s][s];
-    int game_grid[s][s];
-    int lives = 3;
-    int stop = 3;
-
-    do{
-        printf("Do you want to :\n - Enter a mask (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n - Resolve a grid automatically (press 4)");
-        fflush(stdin);
-        scanf("%d",&choice);
-    }while(choice != 1 && choice != 2 && choice != 3);
-
-    if (choice==1)
-    {
-        int mask[s][s];
-        play(s,mask,solution,game_grid,lives,stop);
-    }
-    else
-    {
-        if (choice==2)
-        {
-            int mask[s][s];
-            do{
-                generate_matrix(s, solution, mask);
-                generate_mask(s, solution, mask);
-                do {
-                    printf("Do you want to play with this mask ? (press 1 if yes 2 if no)");
-                    fflush(stdin);
-                    scanf("%d", &c);
-                } while (c != 1 && c != 2);
-            }while(c == 2);
-            game_grid_c(s,mask,solution, game_grid);
-            play(s,mask,solution,game_grid,lives,stop);
-        }
-        else
-        {
-            int mask[s][s];
-            if (choice == 3)
-            {
-                generate_matrix(s,solution,mask);
-                game_grid_c(s,mask,solution, game_grid);
-                play(s,mask, solution,game_grid,lives,stop);
-            }
-            else
-            {
-                generate_matrix(s,solution,mask);
-                game_grid_c(s,mask,solution,game_grid);
-                resolve_automatically(s, game_grid, solution);
-            }
-        }
-    }
-}
-
 void generate_mask(int s,int solution[s][s], int mask[s][s]) /*Display a grid and it mask*/
 {
     printf("\nThe mask grid :\n\n");
@@ -710,7 +654,7 @@ int hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, 
     return stop;
 }
 
-void display_matrix(int s, int grid[s][s])  /*Display the matrix*/
+void display_matrix(int s, int grid[s][s])  // Display the matrix
 {
     if (s==4)
     {
@@ -748,9 +692,76 @@ void display_matrix(int s, int grid[s][s])  /*Display the matrix*/
     }
 }
 
+void menu() // The main menu function
+{
+    int s, choice, c;
+    s = size();
+    int solution[s][s];
+    int game_grid[s][s];
+    int lives = 3;
+    int stop = 3;
+
+    do{
+        printf("Do you want to :\n - Enter a mask (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n - Resolve a grid automatically (press 4)");
+        fflush(stdin);
+        scanf("%d",&choice);
+    }while(choice != 1 && choice != 2 && choice != 3 && choice != 4);
+
+    if (choice==1)
+    {
+        int mask[s][s];
+        generate_matrix(s,solution,mask);
+        for (int i=0;i<s;i++)
+        {
+            for (int j=0;j<s;j++)
+            {
+                mask[i][j] = 10;
+            }
+        }
+        enter_a_mask(s,mask);
+        play(s,mask,solution,game_grid,lives,stop);
+    }
+    else
+    {
+        if (choice==2)
+        {
+            int mask[s][s];
+            do{
+                generate_matrix(s, solution, mask);
+                generate_mask(s, solution, mask);
+                do {
+                    printf("Do you want to play with this mask ? (press 1 if yes 2 if no)");
+                    fflush(stdin);
+                    scanf("%d", &c);
+                } while (c != 1 && c != 2);
+            }while(c == 2);
+            game_grid_c(s,mask,solution, game_grid);
+            play(s,mask,solution,game_grid,lives,stop);
+        }
+        else
+        {
+            if (choice == 3)
+            {
+                int mask[s][s];
+                generate_matrix(s,solution,mask);
+                game_grid_c(s,mask,solution, game_grid);
+                play(s,mask, solution,game_grid,lives,stop);
+            }
+            else
+            {
+                int mask[s][s];
+                generate_matrix(s,solution,mask);
+                game_grid_c(s,mask,solution,game_grid);
+                resolve_automatically(s, game_grid, solution);
+            }
+        }
+    }
+}
+
 void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
 {
-    int column, row, value, full1;
+    int column, row, value;
+    int full1 = 0;
     for (int i=0; i<s;i++)
     {
         for (int j=0; j<s;j++)
@@ -758,7 +769,7 @@ void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
             mask[i][j] = 10;
         }
     }
-    do{
+    while(full1 == 0){
         full1 = full(s,mask);
         column = conv_l_to_nb(s,ask_column(s));
         row = ask_row(s);
@@ -769,5 +780,5 @@ void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
         }while (value != 1 && value != 0);
         mask[row][column] = value;
         display_matrix(s,mask);
-    }while (full1 == 0);
+    }
 }
