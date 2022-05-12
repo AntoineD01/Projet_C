@@ -584,7 +584,6 @@ void menu() /*The main menu function*/
     int s, choice, c;
     s = size();
     int solution[s][s];
-    int mask[s][s];
     int game_grid[s][s];
     int lives = 3;
     int stop = 3;
@@ -597,12 +596,14 @@ void menu() /*The main menu function*/
 
     if (choice==1)
     {
-        enter_a_mask(s, mask);
+        int mask[s][s];
+        play(s,mask,solution,game_grid,lives,stop);
     }
     else
     {
         if (choice==2)
         {
+            int mask[s][s];
             do{
                 generate_matrix(s, solution, mask);
                 generate_mask(s, solution, mask);
@@ -617,6 +618,7 @@ void menu() /*The main menu function*/
         }
         else
         {
+            int mask[s][s];
             if (choice == 3)
             {
                 generate_matrix(s,solution,mask);
@@ -749,15 +751,23 @@ void display_matrix(int s, int grid[s][s])  /*Display the matrix*/
 void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
 {
     int column, row, value, full1;
+    for (int i=0; i<s;i++)
+    {
+        for (int j=0; j<s;j++)
+        {
+            mask[i][j] = 10;
+        }
+    }
     do{
-        display_matrix(s,mask);
         full1 = full(s,mask);
-        column = ask_column(s);
+        column = conv_l_to_nb(s,ask_column(s));
         row = ask_row(s);
         do{
             printf("Enter the value you want (1 if you want to display it or 0 if not): ");
             fflush(stdin);
             scanf("%d",&value);
         }while (value != 1 && value != 0);
+        mask[row][column] = value;
+        display_matrix(s,mask);
     }while (full1 == 0);
 }
