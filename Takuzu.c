@@ -478,7 +478,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                     if (same_solution == 1) /*If the value correspond to the solution grid*/
                     {
                         game_grid[row][j] = value;
-                        printf("You want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row);
+                        printf("You want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row+1);
                     }
                     else
                     {
@@ -487,7 +487,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                         printf("You lost one life. You have now %d.\n\n",lives);
                     }
 
-                    if (lives !=0) /*If no lifes left*/
+                    if (lives !=0) /*If no lives left*/
                     {
                         play(s,mask,solution,game_grid, lives);
                     }
