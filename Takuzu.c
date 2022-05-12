@@ -445,12 +445,12 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                 {
                     hint(s,solution,game_grid,mask,stop,lives);
                     stop-=1;
+                    play(s,mask,solution,game_grid,lives);
                 }
                 else
                 {
                     printf("You have no more hint...");
                 }
-
             }
             else
             {
