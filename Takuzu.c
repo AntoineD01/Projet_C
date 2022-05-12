@@ -646,7 +646,7 @@ void menu() /*The main menu function*/
     {
         if (choice==2)
         {
-            generate_mask(s,mask); /*TO BE DONE*/
+            generate_mask(s,solution,mask); /*TO BE DONE*/
         }
         else
         {
@@ -659,9 +659,13 @@ void menu() /*The main menu function*/
 
 /* To be done*/
 
-void generate_mask(int s,int mask[s][s]) /*Generate a mask*/
+void generate_mask(int s,int solution[s][s], int mask[s][s]) /*Display a grid and it mask*/
 {
-    printf("TO BE DONE\n");
+    printf("\nThis is the solution grid :\n\n");
+    display_matrix(s,solution);
+    printf("\nThis is the mask grid :\n\n");
+    display_matrix(s,mask);
+    printf("\n");
     menu();
 }
 

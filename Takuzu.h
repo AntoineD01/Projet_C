@@ -9,7 +9,7 @@ void menu();
 int size();
 void display_matrix(int s, int grid[s][s]);
 void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s]);
-void generate_mask(int s,int mask[s][s]);
+void generate_mask(int s,int solution[s][s], int mask[s][s]);
 void play(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lives);
 void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lives);
 int empty(int s, int grid[s][s], int row, int column);
