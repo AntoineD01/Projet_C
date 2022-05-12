@@ -22,5 +22,6 @@ void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int colum
 void generate_matrix(int s, int solution[s][s], int mask[s][s]);
 int hint(int s,int solution[s][s],int game_grid[s][s], int mask[s][s], int stop, int lives);
 void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]);
+void enter_a_mask(int s, int mask[s][s]);
 
 #endif //PROJETC_TAKUZU_H
