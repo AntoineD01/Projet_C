@@ -421,11 +421,10 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
 }
 
 
-void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lives) /*Put the value in the cell requested by the user*/
+void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lives, int stop) /*Put the value in the cell requested by the user*/
 {
     char column;
     int row,value,j,valid,same_solution,full1,back;
-    int stop = 3;
     full1 = full(s,game_grid);
 
     if (full1 == 0) /*If the grid is not full*/
@@ -445,15 +444,15 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
         {
             if (back == 2)
             {
-                if (stop != 0)
+                if (stop > 0)
                 {
-                    hint(s,solution,game_grid,mask,stop,lives);
-                    stop-=1;
-                    play(s,mask,solution,game_grid,lives);
+                    stop = hint(s,solution,game_grid,mask,stop,lives);
+                    play(s,mask,solution,game_grid,lives,stop);
                 }
                 else
                 {
                     printf("You have no more hint...");
+                    enter_value(s,mask,solution,game_grid,lives,stop);
                 }
             }
             else
@@ -470,7 +469,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                 if (valid == 0) /*If the cell is not empty*/
                 {
                     printf("The cell is not empty.\nTry again :\n");
-                    play(s,mask, solution,game_grid,lives);
+                    play(s,mask, solution,game_grid,lives,stop);
                 }
                 else /*If the cell is empty*/
                 {
@@ -496,7 +495,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
 
                     if (lives !=0) /*If no lives left*/
                     {
-                        play(s,mask,solution,game_grid, lives);
+                        play(s,mask,solution,game_grid, lives,stop);
                     }
                     else
                     {
@@ -564,33 +563,11 @@ void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int colum
     }
 }
 
-void hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, int lives) /*Display a hint to the user*/
-{
-    char column1 = ask_column(s);
-    int column = conv_l_to_nb(s,column1);
 
-    int row = ask_row(s);
-    row-=1;
-
-    int hint_value, empty1;
-    empty1 = empty(s,game_grid,row,column);
-
-    if (empty1==1)
-    {
-        hint_value = solution[row][column];
-        printf("The value at %c%d is %d.\n",column1,row+1,hint_value);
-    }
-    else
-    {
-        printf("The cell %c%d is not empty so you already know it's value !\n\n",column1,row+1);
-        play(s,mask,solution,game_grid,lives);
-    }
-}
-
-void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives) /*Play the Takuzu*/
+void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives, int stop) /*Play the Takuzu*/
 {
     display_matrix(s,game_grid);
-    enter_value(s,mask,solution,game_grid,lives);
+    enter_value(s,mask,solution,game_grid,lives,stop);
 }
 
 void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) /*Resolve a grid automatically*/
@@ -660,8 +637,9 @@ void menu() /*The main menu function*/
         else
         {
             int lives = 3;
+            int stop = 3;
             game_grid_c(s,mask,solution, game_grid);
-            play(s,mask, solution,game_grid,lives);
+            play(s,mask, solution,game_grid,lives,stop);
         }
     }
 }
@@ -677,4 +655,70 @@ void generate_mask(int s,int solution[s][s], int mask[s][s]) /*Display a grid an
     menu();
 }
 
+int hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, int lives) /*Display a hint to the user*/
+{
+    int column,row;
+    srand(time(0));
+    column = (rand()%s); /*Generate a random number*/
 
+    row = (rand()%s); /*Generate a random number*/
+
+    char columnl;
+    int hint_value;
+
+    if (column == 0)
+    {
+        columnl = 'A';
+    }
+    else
+    {
+        if (column == 1)
+        {
+            columnl = 'B';
+        }
+        else
+        {
+            if (column == 2)
+            {
+                columnl = 'C';
+            }
+            else
+            {
+                if (column == 3)
+                {
+                    columnl = 'D';
+                }
+                else
+                {
+                    if (column == 4)
+                    {
+                        columnl = 'E';
+                    }
+                    else
+                    {
+                        if (column == 5)
+                        {
+                            columnl = 'F';
+                        }
+                        else
+                        {
+                            if (column == 6)
+                            {
+                                columnl = 'G';
+                            }
+                            else
+                            {
+                                columnl = 'H';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    hint_value = solution[row][column];
+    printf("The value at %c%d is %d.\n",columnl,row+1,hint_value);
+    stop= stop-1;
+    return stop;
+}
