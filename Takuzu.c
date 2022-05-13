@@ -770,7 +770,7 @@ void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
         column = conv_l_to_nb(s,ask_column(s));
         row = ask_row(s);
         do{
-            printf("Enter the value you want (1 if you want to display it or 0 if not): ");
+            printf("Enter the value you want (1 if you want to display it or 0 if not):");
             fflush(stdin);
             scanf("%d",&value);
         }while (value != 1 && value != 0);
