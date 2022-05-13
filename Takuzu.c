@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-int size() /*Ask for the size of the Takuzu that the user wants*/
+int size() // Ask for the size of the Takuzu that the user wants
 {
     int size;
     do {
@@ -19,7 +19,7 @@ int size() /*Ask for the size of the Takuzu that the user wants*/
     return(size);
 }
 
-int empty(int s, int grid[s][s], int row, int column) /*Look if the cell is empty*/
+int empty(int s, int grid[s][s], int row, int column) // Look if the cell is empty
 {
     int valid;
 
@@ -34,7 +34,7 @@ int empty(int s, int grid[s][s], int row, int column) /*Look if the cell is empt
     return valid;
 }
 
-int full(int s, int grid[s][s]) /*Look if the grid is full or not*/
+int full(int s, int grid[s][s]) // Look if the grid is full or not
 {
     int full = 1;
     for (int i=0; i<s; i++){
@@ -49,7 +49,7 @@ int full(int s, int grid[s][s]) /*Look if the grid is full or not*/
     return full;
 }
 
-int validity(int s, int solution[s][s], int game_grid[s][s],int row, int column, int value) /*Check if the value entered is same as in the solution*/
+int validity(int s, int solution[s][s], int game_grid[s][s],int row, int column, int value) // Check if the value entered is same as in the solution
 {
     int validity;
     if (value == solution[row][column])
@@ -63,7 +63,7 @@ int validity(int s, int solution[s][s], int game_grid[s][s],int row, int column,
     return validity;
 }
 
-void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s]) /*Create the grid for the user*/
+void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s]) // Create the grid for the user
 {
     for (int i=0; i < s; i++) {
         for (int j = 0; j < s; j++)
@@ -80,7 +80,7 @@ void game_grid_c(int s, int mask[s][s], int solution[s][s], int game_grid[s][s])
     }
 }
 
-char ask_column(int s) /*Ask the user in which column he wants to put his value*/
+char ask_column(int s) // Ask the user in which column he wants to put his value
 {
     char column;
     if (s==4)
@@ -105,7 +105,7 @@ char ask_column(int s) /*Ask the user in which column he wants to put his value*
     return column;
 }
 
-int ask_row(int s) /*Ask the user in which row he wants to put his value*/
+int ask_row(int s) // Ask the user in which row he wants to put his value
 {
     int row;
     if (s==4)
@@ -127,7 +127,7 @@ int ask_row(int s) /*Ask the user in which row he wants to put his value*/
     return row-1;
 }
 
-int conv_l_to_nb(int s,char column) /*Transform the column to a value*/
+int conv_l_to_nb(int s,char column) // Transform the column to a value
 {
     int j;
     if (column == 'a' || column == 'A') {
@@ -163,7 +163,7 @@ int conv_l_to_nb(int s,char column) /*Transform the column to a value*/
     return j;
 }
 
-void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two matrices (solution and mask) according to the size using a library of solution and mask matrices*/
+void generate_matrix(int s, int solution[s][s], int mask[s][s]) // Create two matrices (solution and mask) according to the size using a library of solution and mask matrices
 {
     int r;
     srand(time(0));
@@ -394,7 +394,7 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) /*Create two mat
     }
 }
 
-void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lives, int stop) /*Put the value in the cell requested by the user*/
+void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s], int lives, int stop) // Put the value in the cell requested by the user
 {
     char column;
     int row,value,j,valid,same_solution,full1,back;
@@ -488,7 +488,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
 
 }
 
-void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int column, int value) /*Explain what is error made by the user*/
+void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int column, int value) // Explain what is error made by the user
 {
     if (column-1 >-1 && column-2 >-1 && game_grid[row][column-1] == game_grid[row][column-2] && game_grid[row][column-1] != 10 && game_grid[row][column-2] != 10)
     {
@@ -535,50 +535,6 @@ void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int colum
     }
 }
 
-void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives, int stop) /*Play the Takuzu*/
-{
-    display_matrix(s,game_grid);
-    enter_value(s,mask,solution,game_grid,lives,stop);
-}
-
-void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) /*Resolve a grid automatically*/
-{
-    int empty1,full1;
-    char c;
-    display_matrix(s,game_grid);
-    do{
-        printf("Enter n to see the next resolution :");
-        fflush(stdin);
-        scanf(" %c",&c);
-    }while (c != 'n');
-    c = 'a';
-    full1 = full(s,game_grid);
-    do{
-        for (int i=0; i<s; i++)
-        {
-            for (int j=0; j<s; j++)
-            {
-                empty1 = empty(s,game_grid,i,j);
-                if (empty1 == 1)
-                {
-                    game_grid[i][j]=solution[i][j];
-                    display_matrix(s,game_grid);
-                    while (c != 'n')
-                    {
-                        printf("Enter n to see the next resolution :");
-                        fflush(stdin);
-                        scanf(" %c",&c);
-                    }
-                    c = 'a';
-                    full1 = full(s,game_grid);
-                }
-            }
-        }
-    }while(full1==0);
-    printf("\nYou're back to the main menu.\n");
-    menu();
-}
-
 void generate_mask(int s,int solution[s][s], int mask[s][s]) /*Display a grid and it mask*/
 {
     printf("\nThe mask grid :\n\n");
@@ -586,7 +542,7 @@ void generate_mask(int s,int solution[s][s], int mask[s][s]) /*Display a grid an
     printf("\n");
 }
 
-int hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, int lives) /*Display a hint to the user*/
+int hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, int lives) // Display a hint to the user
 {
     int column,row,empty1;
 
@@ -696,6 +652,75 @@ void display_matrix(int s, int grid[s][s])  // Display the matrix
     }
 }
 
+void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
+{
+    int column, row, value;
+    int full1 = 0;
+    for (int i=0; i<s;i++)
+    {
+        for (int j=0; j<s;j++)
+        {
+            mask[i][j] = 10;
+        }
+    }
+    while(full1 == 0){
+        column = conv_l_to_nb(s,ask_column(s));
+        row = ask_row(s);
+        do{
+            printf("Enter the value you want (1 if you want to display it or 0 if not):");
+            fflush(stdin);
+            scanf("%d",&value);
+        }while (value != 1 && value != 0);
+        mask[row][column] = value;
+        display_matrix(s,mask);
+        full1 = full(s,mask);
+    }
+}
+
+void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives, int stop) /*Play the Takuzu*/
+{
+    display_matrix(s,game_grid);
+    enter_value(s,mask,solution,game_grid,lives,stop);
+}
+
+void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) /*Resolve a grid automatically*/
+{
+    int empty1,full1;
+    char c;
+    display_matrix(s,game_grid);
+    do{
+        printf("Enter n to see the next resolution :");
+        fflush(stdin);
+        scanf(" %c",&c);
+    }while (c != 'n');
+    c = 'a';
+    full1 = full(s,game_grid);
+    do{
+        for (int i=0; i<s; i++)
+        {
+            for (int j=0; j<s; j++)
+            {
+                empty1 = empty(s,game_grid,i,j);
+                if (empty1 == 1)
+                {
+                    game_grid[i][j]=solution[i][j];
+                    display_matrix(s,game_grid);
+                    while (c != 'n')
+                    {
+                        printf("Enter n to see the next resolution :");
+                        fflush(stdin);
+                        scanf(" %c",&c);
+                    }
+                    c = 'a';
+                    full1 = full(s,game_grid);
+                }
+            }
+        }
+    }while(full1==0);
+    printf("\nYou're back to the main menu.\n");
+    menu();
+}
+
 void menu() // The main menu function
 {
     int s, choice, c;
@@ -752,30 +777,5 @@ void menu() // The main menu function
                 resolve_automatically(s, game_grid, solution);
             }
         }
-    }
-}
-
-void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
-{
-    int column, row, value;
-    int full1 = 0;
-    for (int i=0; i<s;i++)
-    {
-        for (int j=0; j<s;j++)
-        {
-            mask[i][j] = 10;
-        }
-    }
-    while(full1 == 0){
-        column = conv_l_to_nb(s,ask_column(s));
-        row = ask_row(s);
-        do{
-            printf("Enter the value you want (1 if you want to display it or 0 if not):");
-            fflush(stdin);
-            scanf("%d",&value);
-        }while (value != 1 && value != 0);
-        mask[row][column] = value;
-        display_matrix(s,mask);
-        full1 = full(s,mask);
     }
 }
