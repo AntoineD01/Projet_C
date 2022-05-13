@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 int size() // Ask for the size of the Takuzu that the user wants
 {
@@ -89,8 +90,7 @@ char ask_column(int s) // Ask the user in which column he wants to put his value
             printf("Enter the column of the value you want (A to D): \n");
             fflush(stdin);
             scanf(" %c", &column);
-        } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'a' && column != 'b' &&
-                 column != 'c' && column != 'd');
+        } while (!strchr("ABCDabcd", column));
     }
     else
     {
@@ -98,9 +98,7 @@ char ask_column(int s) // Ask the user in which column he wants to put his value
             printf("Enter the column of the value you want (A to H): \n");
             fflush(stdin);
             scanf(" %c", &column);
-        } while (column != 'A' && column != 'B' && column != 'C' && column != 'D' && column != 'E' && column != 'F' &&
-                 column != 'G' && column != 'H' && column != 'a' && column != 'b' && column != 'c' && column != 'd' && column != 'e' && column != 'f' &&
-                 column != 'g' && column != 'h');
+        } while (!strchr("ABCDEFGHabcdefgh", column));
     }
     return column;
 }
@@ -654,7 +652,7 @@ void display_matrix(int s, int grid[s][s])  // Display the matrix
 
 void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
 {
-    int column, row, value;
+    int column, row, value,back;
     int full1 = 0;
     for (int i=0; i<s;i++)
     {
@@ -663,18 +661,31 @@ void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
             mask[i][j] = 10;
         }
     }
-    while(full1 == 0){
-        column = conv_l_to_nb(s,ask_column(s));
-        row = ask_row(s);
+    do{
         do{
-            printf("Enter the value you want (1 if you want to display it or 0 if not):");
+            printf("\nWhat do you want to do next ?\n - Enter another value (press 1)\n - Go back to the main menu (press 2)\n");
             fflush(stdin);
-            scanf("%d",&value);
-        }while (value != 1 && value != 0);
-        mask[row][column] = value;
-        display_matrix(s,mask);
-        full1 = full(s,mask);
-    }
+            scanf("%d",&back);
+        }while (back != 1 && back != 2);
+
+        if (back==1)
+        {
+                column = conv_l_to_nb(s,ask_column(s));
+                row = ask_row(s);
+                do{
+                    printf("Enter the value you want (1 if you want to display it or 0 if not):");
+                    fflush(stdin);
+                    scanf("%d",&value);
+                }while (value != 1 && value != 0);
+                mask[row][column] = value;
+                display_matrix(s,mask);
+                full1 = full(s,mask);
+        }
+        else
+        {
+            menu();
+        }
+    }while(full1==0);
 }
 
 void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives, int stop) /*Play the Takuzu*/
