@@ -165,7 +165,7 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) // Create two ma
 {
     int r;
     srand(time(0));
-    r = (rand()%2); /*Generate a random number*/
+    r = (rand()%4); /*Generate a random number*/
     if (s==4)
     {
         int solution14[4][4]={
@@ -454,7 +454,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                     if (same_solution == 1) /*If the value correspond to the solution grid*/
                     {
                         game_grid[row][j] = value;
-                        printf("You want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row+1);
+                        printf("\nYou want to enter %d at the coordinate %c%d. This move is valid.\n", value, column, row+1);
                     }
                     else
                     {
@@ -607,7 +607,7 @@ int hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, 
     }
 
     hint_value = solution[row][column];
-    printf("The value at %c%d is %d.\n",columnl,row+1,hint_value);
+    printf("\nThe value at %c%d is %d.\n",columnl,row+1,hint_value);
     stop= stop-1;
     return stop;
 }
