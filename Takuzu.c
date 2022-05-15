@@ -125,7 +125,7 @@ int ask_row(int s) // Ask the user in which row he wants to put his value
     return row-1;
 }
 
-int conv_l_to_nb(int s,char column) // Transform the column to a value
+int conv_l_to_nb(char column) // Transform the column to a value
 {
     int j;
     if (column == 'a' || column == 'A') {
@@ -417,7 +417,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
             {
                 if (stop > 0)
                 {
-                    stop = hint(s,solution,game_grid,mask,stop,lives);
+                    stop = hint(s,solution,game_grid,stop);
                     play(s,mask,solution,game_grid,lives,stop);
                 }
                 else
@@ -429,7 +429,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
             else
             {
                 column = ask_column(s);
-                j = conv_l_to_nb(s, column); /*Convert the letter given by the user to the real column in the matrix*/
+                j = conv_l_to_nb(column); /*Convert the letter given by the user to the real column in the matrix*/
 
 
                 row = ask_row(s);
@@ -458,7 +458,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
                     }
                     else
                     {
-                        why_wrong(s,solution,game_grid,row,j,value); /*Explain the error*/
+                        why_wrong(s,game_grid,row,j); /*Explain the error*/
                         lives-=1;
                         printf("You lost one life. You have now %d.\n\n",lives);
                     }
@@ -486,7 +486,7 @@ void enter_value(int s, int mask[s][s], int solution[s][s], int game_grid[s][s],
 
 }
 
-void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int column, int value) // Explain what is error made by the user
+void why_wrong(int s, int game_grid[s][s], int row, int column) // Explain what is error made by the user
 {
     if (column-1 >-1 && column-2 >-1 && game_grid[row][column-1] == game_grid[row][column-2] && game_grid[row][column-1] != 10 && game_grid[row][column-2] != 10)
     {
@@ -533,14 +533,7 @@ void why_wrong(int s, int solution[s][s],int game_grid[s][s], int row, int colum
     }
 }
 
-void generate_mask(int s,int solution[s][s], int mask[s][s]) /*Display a grid and it mask*/
-{
-    printf("\nThe mask grid :\n\n");
-    display_matrix(s,mask);
-    printf("\n");
-}
-
-int hint(int s,int solution[s][s],int game_grid[s][s],int mask[s][s], int stop, int lives) // Display a hint to the user
+int hint(int s,int solution[s][s],int game_grid[s][s], int stop) // Display a hint to the user
 {
     int column,row,empty1;
 
@@ -670,7 +663,7 @@ void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
 
         if (back==1)
         {
-                column = conv_l_to_nb(s,ask_column(s));
+                column = conv_l_to_nb(ask_column(s));
                 row = ask_row(s);
                 do{
                     printf("Enter the value you want (1 if you want to display it or 0 if not):");
@@ -688,13 +681,13 @@ void enter_a_mask(int s, int mask[s][s]) // Allow the user to enter a mask
     }while(full1==0);
 }
 
-void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives, int stop) /*Play the Takuzu*/
+void play(int s, int mask[s][s], int solution[s][s],int game_grid[s][s], int lives, int stop) // Play the Takuzu
 {
     display_matrix(s,game_grid);
     enter_value(s,mask,solution,game_grid,lives,stop);
 }
 
-void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) /*Resolve a grid automatically*/
+void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) // Resolve a grid automatically
 {
     int empty1,full1;
     char c;
@@ -744,10 +737,10 @@ void menu() // The main menu function
 
 
     do{
-        printf("Do you want to :\n - Enter a mask (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n - Resolve a grid automatically (press 4)");
+        printf("Do you want to :\n - Enter a mask (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n - Resolve a grid automatically (press 4)\n - Generate a solution grid (press 5) ONLY WORK FOR 4*4");
         fflush(stdin);
         scanf("%d",&choice);
-    }while(choice != 1 && choice != 2 && choice != 3 && choice != 4);
+    }while(choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5);
 
     if (choice==1)
     {
@@ -763,7 +756,9 @@ void menu() // The main menu function
         {
             do{
                 generate_matrix(s, solution, mask);
-                generate_mask(s, solution, mask);
+                printf("\nThe mask grid :\n\n");
+                display_matrix(s,mask);
+                printf("\n");
                 do {
                     printf("Do you want to play with this mask ? (press 1 if yes 2 if no)");
                     fflush(stdin);
@@ -783,9 +778,96 @@ void menu() // The main menu function
             }
             else
             {
-                generate_matrix(s,solution,mask);
-                game_grid_c(s,mask,solution,game_grid);
-                resolve_automatically(s, game_grid, solution);
+                if (choice == 4)
+                {
+                    game_grid_c(s,mask,solution,game_grid);
+                    resolve_automatically(s, game_grid, solution);
+                    generate_matrix(s,solution,mask);
+                }
+                else
+                {
+                    create_solution(s,game_grid);
+                    display_matrix(s,game_grid);
+                }
+
+            }
+        }
+    }
+}
+
+void create_solution(int s, int game_grid[s][s]) // Create a correct solution grid
+{
+    int x,y,sum_r,sum_c;
+    grid_generator(s,game_grid);
+
+    x = 0;
+    for (int i = 0; i < s; i++) {
+        sum_r = 0;
+        for (int j = 0; j < s; j++) {
+            sum_r += game_grid[i][j];
+            if (j == s - 1 && sum_r == s / 2) {
+                x += 1;
+            }
+        }
+    }
+
+    display_matrix(s,game_grid);
+    printf("\n");
+
+    if (x < s)
+    {
+        create_solution(s,game_grid);
+    }
+    else
+    {
+        y = 0;
+        for (int i = 0; i < s; i++) {
+            sum_c = 0;
+            for (int j = 0; j < s; j++) {
+                sum_c+= game_grid[j][i];
+                if (j == s - 1 && sum_c == s / 2) {
+                    y+=1;
+                }
+            }
+        }
+        if (y<s)
+        {
+            create_solution(s,game_grid);
+        }
+    }
+}
+
+void grid_generator(int s, int game_grid[s][s]) //Generate a random solution grid
+{
+    int r;
+    srand(time(0));
+
+    for (int i = 0; i < s; i++) {
+        for (int j = 0; j < s; j++) {
+
+            if (j - 1 > -1 && j - 2 > -1 && game_grid[i][j - 1] == 1 && game_grid[i][j - 2] == 1) { //If the previous value in the row are a 1
+                game_grid[i][j] = 0;
+            } else {
+                if (j - 1 > -1 && j - 2 > -1 && game_grid[i][j - 1] == 0 &&
+                    game_grid[i][j - 2] == 0) { //If the previous value in the row are a 0
+                    game_grid[i][j] = 1;
+                } else {
+                    if (i - 1 > -1 && i - 2 > -1 && game_grid[i - 1][j] == 1 && game_grid[i - 2][j] == 1) //If the previous value in the column are a 1
+                    {
+                        game_grid[i][j] = 0;
+                    }
+                    else {
+                        if (i - 1 > -1 && i - 2 > -1 && game_grid[i - 1][j] == 0 && game_grid[i - 2][j] == 0) { //If the previous value in the column are a 0
+                            game_grid[i][j] = 1;
+                        }
+                        else
+                        {
+                            r = (rand()%2); /*Generate a random number*/
+                            game_grid[i][j] = r;
+                        }
+                    }
+
+                }
             }
         }
     }
