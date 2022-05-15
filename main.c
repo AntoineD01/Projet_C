@@ -8,5 +8,5 @@
 int main()
 {
     printf("Hello player, welcome to Takuzu !\n");
-    menu();
+    menu(); //Call the menu function that will display all the features
 }
