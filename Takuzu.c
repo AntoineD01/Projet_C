@@ -1,13 +1,13 @@
 //
-// Created by Antoine Dupont on 07/04/2022.
+// Project Takuzu provided by Antoine Dupont et Alexandre Poujol
 //
+//Description of the role of every function
 
 #include "Takuzu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <math.h>
 
 int size() // Ask for the size of the Takuzu that the user wants
 {

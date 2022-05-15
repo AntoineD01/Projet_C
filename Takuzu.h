@@ -1,6 +1,7 @@
 //
-// Created by Antoine Dupont on 07/04/2022.
+// Project Takuzu provided by Antoine Dupont et Alexandre Poujol
 //
+//Declaration of the functions
 
 #ifndef PROJETC_TAKUZU_H
 #define PROJETC_TAKUZU_H
