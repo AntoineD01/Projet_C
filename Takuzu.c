@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <math.h>
 
 int size() // Ask for the size of the Takuzu that the user wants
 {
@@ -725,76 +726,6 @@ void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]) // Re
     menu();
 }
 
-void menu() // The main menu function
-{
-    int s, choice, c;
-    s = size();
-    int solution[s][s];
-    int mask[s][s];
-    int game_grid[s][s];
-    int lives = 3;
-    int stop = 3;
-
-
-    do{
-        printf("Do you want to :\n - Enter a mask (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n - Resolve a grid automatically (press 4)\n - Generate a solution grid (press 5) ONLY WORK FOR 4*4");
-        fflush(stdin);
-        scanf("%d",&choice);
-    }while(choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5);
-
-    if (choice==1)
-    {
-        generate_matrix(s,solution,mask);
-        int mask1[s][s];
-        enter_a_mask(s,mask1);
-        game_grid_c(s,mask1,solution,game_grid);
-        play(s,mask1,solution,game_grid,lives,stop);
-    }
-    else
-    {
-        if (choice==2)
-        {
-            do{
-                generate_matrix(s, solution, mask);
-                printf("\nThe mask grid :\n\n");
-                display_matrix(s,mask);
-                printf("\n");
-                do {
-                    printf("Do you want to play with this mask ? (press 1 if yes 2 if no)");
-                    fflush(stdin);
-                    scanf("%d", &c);
-                } while (c != 1 && c != 2);
-            }while(c == 2);
-            game_grid_c(s,mask,solution, game_grid);
-            play(s,mask,solution,game_grid,lives,stop);
-        }
-        else
-        {
-            if (choice == 3)
-            {
-                generate_matrix(s,solution,mask);
-                game_grid_c(s,mask,solution, game_grid);
-                play(s,mask, solution,game_grid,lives,stop);
-            }
-            else
-            {
-                if (choice == 4)
-                {
-                    game_grid_c(s,mask,solution,game_grid);
-                    resolve_automatically(s, game_grid, solution);
-                    generate_matrix(s,solution,mask);
-                }
-                else
-                {
-                    create_solution(s,game_grid);
-                    display_matrix(s,game_grid);
-                }
-
-            }
-        }
-    }
-}
-
 void create_solution(int s, int game_grid[s][s]) // Create a correct solution grid
 {
     int x,y,sum_r,sum_c;
@@ -872,3 +803,124 @@ void grid_generator(int s, int game_grid[s][s]) //Generate a random solution gri
         }
     }
 }
+
+void menu() // The main menu function
+{
+    int s, choice, c;
+    s = size();
+    int solution[s][s];
+    int mask[s][s];
+    int game_grid[s][s];
+    int lives = 3;
+    int stop = 3;
+
+
+    do{
+        printf("Do you want to :\n - Enter a mask (press 1)\n - Automatically generate a mask (press 2)\n - Play (press 3)\n - Resolve a grid automatically (press 4)\n - Generate a solution grid (press 5) ONLY WORK FOR 4*4");
+        fflush(stdin);
+        scanf("%d",&choice);
+    }while(choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5);
+
+    if (choice==1)
+    {
+        generate_matrix(s,solution,mask);
+        int mask1[s][s];
+        enter_a_mask(s,mask1);
+        game_grid_c(s,mask1,solution,game_grid);
+        play(s,mask1,solution,game_grid,lives,stop);
+    }
+    else
+    {
+        if (choice==2)
+        {
+            int mask1[s][s];
+            do{
+                generate_matrix(s, solution, mask);
+                mask_generator(s,mask1);
+                printf("\nThe mask grid :\n\n");
+                display_matrix(s,mask1);
+                printf("\n");
+                do {
+                    printf("Do you want to play with this mask ? (press 1 if yes 2 if no)");
+                    fflush(stdin);
+                    scanf("%d", &c);
+                } while (c != 1 && c != 2);
+            }while(c == 2);
+            game_grid_c(s,mask1,solution, game_grid);
+            play(s,mask1,solution,game_grid,lives,stop);
+        }
+        else
+        {
+            if (choice == 3)
+            {
+                generate_matrix(s,solution,mask);
+                game_grid_c(s,mask,solution, game_grid);
+                play(s,mask, solution,game_grid,lives,stop);
+            }
+            else
+            {
+                if (choice == 4)
+                {
+                    game_grid_c(s,mask,solution,game_grid);
+                    resolve_automatically(s, game_grid, solution);
+                    generate_matrix(s,solution,mask);
+                }
+                else
+                {
+                    create_solution(s,game_grid);
+                    display_matrix(s,game_grid);
+                }
+
+            }
+        }
+    }
+}
+
+void mask_generator(int s, int mask[s][s])
+{
+    int r;
+    srand(time(0));
+
+    for (int i=0; i<s; i++)
+    {
+        for (int j=0; j<s; j++)
+        {
+            r = (rand()%2); /*Generate a random number*/
+            mask[i][j] = r;
+        }
+    }
+}
+
+/*void solution_generator(int s, int game_grid[s][s])
+{
+    int r,temp_row[s];
+    srand(time(0));
+
+    for(int i = 0; i<s;i++)
+    {
+        r = (rand()%2); //Generate a random number
+        temp_row[i] = r;
+    }
+
+    int k = 0;
+    for (int i = 0; i < s; i++)
+        k = 10 * k + temp_row[i]; //Transform the array into an integer
+
+    printf("%d",bina_to_deci(k));
+
+
+    if ()
+}
+
+int bina_to_deci(int binary) {
+    int r, decimal = 0, i = 0 ;
+
+    while (binary!=0) {
+        r = binary % 10;
+        binary /= 10;
+        decimal += r * pow(2, i);
+        i++;
+    }
+
+    return decimal;
+}*/

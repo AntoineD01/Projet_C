@@ -24,5 +24,10 @@ void resolve_automatically(int s, int game_grid[s][s], int solution[s][s]);
 void enter_a_mask(int s, int mask[s][s]);
 void create_solution(int s, int game_grid[s][s]);
 void grid_generator(int s, int game_grid[s][s]);
+void mask_generator(int s, int mask[s][s]);
+
+
+void solution_generator(int s, int game_grid[s][s]);
+int bina_to_deci(int binary);
 
 #endif //PROJETC_TAKUZU_H
