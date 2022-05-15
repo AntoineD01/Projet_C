@@ -877,9 +877,9 @@ void menu() // The main menu function that display the features and called the f
             {
                 if (choice == 4) // If the user wants to see the program resolve a grid
                 {
+                    generate_matrix(s,solution,mask);
                     game_grid_c(s,mask,solution,game_grid);
                     resolve_automatically(s, game_grid, solution);
-                    generate_matrix(s,solution,mask);
                 }
                 else // If the user wants to create a solution grid
                 {
