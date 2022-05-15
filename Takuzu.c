@@ -147,7 +147,7 @@ int conv_l_to_nb(char column) // Transform the column entered which is a letter 
                         if (column == 'f' || column == 'F') {
                             j = 5;
                         } else {
-                            if (column == 'g' || column == 'H'){
+                            if (column == 'g' || column == 'G'){
                                 j=6;
                             }
                             else{
