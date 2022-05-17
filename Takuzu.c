@@ -752,7 +752,7 @@ void create_solution(int s, int solution[s][s]) // Create a correct solution gri
             for (int j = 0; j < s; j++) {
                 sum_c+= solution[j][i];
                 if (j == s - 1 && sum_c == s / 2) {
-                    y+=1; // Check that every column do not have more that 2 (if 4*4) or 4 (if 8*8) '1'
+                    y+=1; // Check that every column do not have more than 2 (if 4*4) or 4 (if 8*8) '1'
                 }
             }
         }
@@ -887,6 +887,7 @@ void menu() // The main menu function that display the features and called the f
                     {
                         create_solution(s,game_grid);
                         display_matrix(s,game_grid);
+                        menu();
                     }
                     else
                     {
