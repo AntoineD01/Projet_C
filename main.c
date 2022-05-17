@@ -7,6 +7,6 @@
 
 int main()
 {
-    printf("Hello player, welcome to Takuzu !\n");
+    printf("\nHello player, welcome to Takuzu !\n\n");
     menu(); //Call the menu function that will display all the features
 }
