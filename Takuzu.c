@@ -207,10 +207,11 @@ void generate_matrix(int s, int solution[s][s], int mask[s][s]) // Create two ma
         };
         int solution44[4][4]={
                 {0, 1, 1, 0},
-                {1, 1, 0, 1},
+                {1, 0, 0, 1},
                 {1, 0, 1, 0},
                 {0, 1, 0, 1}
         };
+
         int mask44[4][4]={
                 {0, 1, 0, 1},
                 {1, 0, 0, 0},
@@ -891,7 +892,7 @@ void menu() // The main menu function that display the features and called the f
                     }
                     else
                     {
-                        printf("This function is not efficient enough for a 8*8 grid...");
+                        printf("This function is not efficient enough for a 8*8 grid...\n");
                         menu();
                     }
 
